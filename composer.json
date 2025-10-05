@@ -1,6 +1,6 @@
 {
-    "name": "nyoncode/{!-package_name-!}",
-    "description": "",
+    "name": "nyoncode/livewire-table",
+    "description": "Livewire table",
     "authors": [
         {
             "name": "Ondřej Nyklíček",
@@ -16,13 +16,13 @@
     },
     "autoload": {
         "psr-4": {
-            "NyonCode\\{!-package_namespace-!}\\": "src"
+            "NyonCode\\LivewireTable\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "NyonCode\\{!-package_namespace-!}\\Providers\\SkeletonServiceProvider"
+                "NyonCode\\LivewireTable\\Providers\\LivewireTableServiceProvider"
             ]
         }
     },
