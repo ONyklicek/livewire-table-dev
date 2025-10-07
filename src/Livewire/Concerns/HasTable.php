@@ -1,29 +1,41 @@
 <?php
 
-namespace App\Support\Tables\Livewire\Concerns;
+namespace NyonCode\LivewireTable\Livewire\Concerns;
 
-use App\Models\TableFilterPreset;
-use App\Support\Tables\Table;
+use NyonCode\LivewireTable\Models\TableFilterPreset;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use NyonCode\LivewireTable\Table;
 
 trait HasTable
 {
     use WithPagination;
 
     public array $tableFilters = [];
+
     public string $tableSearch = '';
+
     public string $tableSortColumn = '';
+
     public string $tableSortDirection = 'asc';
+
     public int $tablePerPage = 10;
+
     public array $tableSelected = [];
+
     public bool $tableSelectAll = false;
+
     public array $expandedGroups = [];
+
     public array $expandedRows = [];
+
     public array $hiddenColumns = [];
+
     public ?int $activePresetId = null;
+
     public bool $showPresetModal = false;
+
     public string $presetName = '';
 
     public function mountHasTable(): void
@@ -47,18 +59,13 @@ trait HasTable
 
     /**
      * Load preset
-     *
-     * @param  int  $presetId
-     *
-     * @return void
      */
-
     #[On('load-preset')]
     public function loadPreset(int $presetId): void
     {
         $preset = TableFilterPreset::find($presetId);
 
-        if (!$preset || $preset->user_id !== auth()->id()) {
+        if (! $preset || $preset->user_id !== auth()->id()) {
             return;
         }
 
@@ -110,7 +117,7 @@ trait HasTable
 
     public function selectAll(): void
     {
-        $this->tableSelectAll = !$this->tableSelectAll;
+        $this->tableSelectAll = ! $this->tableSelectAll;
 
         if ($this->tableSelectAll) {
             $this->tableSelected = $this->table->getData()->pluck('id')->toArray();
@@ -138,7 +145,7 @@ trait HasTable
         $table = $this->table(Table::make());
         $bulkActionObject = $table->getBulkActions()->firstWhere('name', $action);
 
-        if ($bulkActionObject && !empty($this->tableSelected)) {
+        if ($bulkActionObject && ! empty($this->tableSelected)) {
             $model = $table->getModel();
             $records = $model instanceof Builder
                 ? $model->findMany($this->tableSelected)
@@ -154,7 +161,7 @@ trait HasTable
         $table = $this->table(Table::make());
         $column = $table->getColumns()->firstWhere('field', $columnField);
 
-        if (!$column instanceof \App\Tables\Columns\EditableColumn) {
+        if (! $column instanceof \App\Tables\Columns\EditableColumn) {
             return;
         }
 
@@ -163,13 +170,13 @@ trait HasTable
             ? $model->find($recordId)
             : $model::find($recordId);
 
-        if (!$record) {
+        if (! $record) {
             return;
         }
 
         if ($rules = $column->getRules()) {
             $this->validate([
-                'value' => $rules
+                'value' => $rules,
             ]);
         }
 
@@ -177,7 +184,7 @@ trait HasTable
 
         $this->dispatch('cell-updated', [
             'recordId' => $recordId,
-            'column' => $columnField
+            'column' => $columnField,
         ]);
     }
 
@@ -186,7 +193,7 @@ trait HasTable
         if (in_array($groupKey, $this->expandedGroups)) {
             $this->expandedGroups = array_filter(
                 $this->expandedGroups,
-                fn($k) => $k !== $groupKey
+                fn ($k) => $k !== $groupKey
             );
         } else {
             $this->expandedGroups[] = $groupKey;
@@ -198,7 +205,7 @@ trait HasTable
         if (in_array($recordId, $this->expandedRows)) {
             $this->expandedRows = array_filter(
                 $this->expandedRows,
-                fn($id) => $id !== $recordId
+                fn ($id) => $id !== $recordId
             );
         } else {
             $this->expandedRows[] = $recordId;
@@ -210,7 +217,7 @@ trait HasTable
         if (in_array($columnField, $this->hiddenColumns)) {
             $this->hiddenColumns = array_filter(
                 $this->hiddenColumns,
-                fn($field) => $field !== $columnField
+                fn ($field) => $field !== $columnField
             );
         } else {
             $this->hiddenColumns[] = $columnField;

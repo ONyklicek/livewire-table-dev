@@ -1,43 +1,45 @@
 <?php
 
-namespace App\Support\Tables\Concerns;
+namespace NyonCode\LivewireTable\Concerns;
 
 use Closure;
 
 trait HasSubRows
 {
     protected ?string $subRowRelation = null;
+
     protected ?Closure $subRowView = null;
+
     protected array $expandedRows = [];
+
     protected bool $lazyLoadSubRows = true;
 
     public function subRows(string $relation, Closure $viewCallback): static
     {
         $this->subRowRelation = $relation;
         $this->subRowView = $viewCallback;
+
         return $this;
     }
 
     public function lazyLoadSubRows(bool $lazy = true): static
     {
         $this->lazyLoadSubRows = $lazy;
+
         return $this;
     }
 
     /**
      * Render sub row.
-     *
-     * @param $record
-     *
-     * @return string|null
      */
     public function renderSubRow($record): ?string
     {
-        if (!$this->subRowView || !$this->isRowExpanded($record->id)) {
+        if (! $this->subRowView || ! $this->isRowExpanded($record->id)) {
             return null;
         }
 
         $subData = $this->getSubRowsData($record);
+
         return ($this->subRowView)($subData, $record);
     }
 
@@ -48,7 +50,7 @@ trait HasSubRows
 
     public function getSubRowsData($record): mixed
     {
-        if (!$this->subRowRelation) {
+        if (! $this->subRowRelation) {
             return null;
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Concerns;
+namespace NyonCode\LivewireTable\Concerns;
 
 use Illuminate\Support\Collection;
 
@@ -15,20 +15,18 @@ trait HasColumns
      *     Column::make('email'),
      * ])
      *
-     * @param  array  $columns
      *
      * @return $this
      */
     public function columns(array $columns): static
     {
         $this->columns = collect($columns);
+
         return $this;
     }
 
     /**
      * Get all columns.
-     *
-     * @return Collection
      */
     public function getColumns(): Collection
     {

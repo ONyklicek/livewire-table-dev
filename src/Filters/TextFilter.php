@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Filters;
+namespace NyonCode\LivewireTable\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -9,7 +9,7 @@ class TextFilter extends Filter
     protected ?string $operator = 'like';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function apply(Builder $query, mixed $value): Builder
     {
@@ -29,12 +29,12 @@ class TextFilter extends Filter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(): string
     {
         return view('components.table.filters.text', [
-            'filter' => $this
+            'filter' => $this,
         ])->render();
     }
 }

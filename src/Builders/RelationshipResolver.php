@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Builders;
+namespace NyonCode\LivewireTable\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -9,17 +9,13 @@ class RelationshipResolver
 {
     /**
      * Extract relationship names from columns
-     *
-     * @param  Collection  $columns
-     *
-     * @return array
      */
     public static function extractRelationships(Collection $columns): array
     {
         return $columns
-            ->map(fn($column) => $column->getField())
-            ->filter(fn($field) => str_contains($field, '.'))
-            ->map(fn($field) => self::parseRelationship($field))
+            ->map(fn ($column) => $column->getField())
+            ->filter(fn ($field) => str_contains($field, '.'))
+            ->map(fn ($field) => self::parseRelationship($field))
             ->flatten()
             ->unique()
             ->values()
@@ -29,10 +25,6 @@ class RelationshipResolver
     /**
      * Parse relationship from dot notation
      * Example: "user.posts.comments" -> ["user", "user.posts", "user.posts.comments"]
-     *
-     * @param  string  $field
-     *
-     * @return array
      */
     public static function parseRelationship(string $field): array
     {
@@ -52,11 +44,6 @@ class RelationshipResolver
 
     /**
      * Eager load relationships on query
-     *
-     * @param  Builder  $query
-     * @param  array  $relationships
-     *
-     * @return Builder
      */
     public static function eagerLoad(Builder $query, array $relationships): Builder
     {
@@ -80,11 +67,6 @@ class RelationshipResolver
 
     /**
      * Optimize relationship loading with counts
-     *
-     * @param  Builder  $query
-     * @param  array  $relations
-     *
-     * @return Builder
      */
     public static function withCounts(Builder $query, array $relations): Builder
     {

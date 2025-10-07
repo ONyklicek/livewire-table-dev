@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Support\Tables\Builders;
+namespace NyonCode\LivewireTable\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 
 class QueryBuilder
 {
-    protected Builder $query;
+    public Builder $query;
 
     /**
      * Create a new instance of the query builder.
-     *
-     * @param  Builder  $query
      */
     public function __construct(Builder $query)
     {
@@ -29,7 +27,7 @@ class QueryBuilder
             foreach ($columns as $column) {
                 if (str_contains($column, '.')) {
                     [$relation, $field] = explode('.', $column, 2);
-                    $q->orWhereHas($relation, fn($query) => $query->where($field, 'like', "%{$search}%")
+                    $q->orWhereHas($relation, fn ($query) => $query->where($field, 'like', "%{$search}%")
                     );
                 } else {
                     $q->orWhere($column, 'like', "%{$search}%");
@@ -51,7 +49,7 @@ class QueryBuilder
             if (str_contains($column, '.')) {
                 [$relation, $field] = explode('.', $column, 2);
                 $this->query->with([
-                    $relation => fn($q) => $q->orderBy($field, $direction)
+                    $relation => fn ($q) => $q->orderBy($field, $direction),
                 ]);
             } else {
                 $this->query->orderBy($column, $direction);
@@ -77,8 +75,6 @@ class QueryBuilder
 
     /**
      * Get the query
-     *
-     * @return Builder
      */
     public function get(): Builder
     {

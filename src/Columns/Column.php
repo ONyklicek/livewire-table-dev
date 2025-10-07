@@ -1,31 +1,37 @@
 <?php
 
-namespace App\Support\Tables\Columns;
+namespace NyonCode\LivewireTable\Columns;
 
 use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Str;
+use Illuminate\Support\Str;
 use Throwable;
 use UnitEnum;
 
 abstract class Column implements Htmlable
 {
     public string $field;
+
     public ?string $label = null;
+
     public bool $sortable = false;
+
     public bool $searchable = false;
+
     public bool $hidden = false;
+
     protected array $responsiveHidden = [];
+
     protected ?Closure $formatCallback = null;
+
     protected ?string $view = null;
+
     protected ?Model $record = null;
 
     /**
      * Create a new column instance.
-     *
-     * @param  string  $field
      */
     public function __construct(string $field)
     {
@@ -37,8 +43,7 @@ abstract class Column implements Htmlable
      * Create a new column instance.
      *
      * @param  string  $field  The field name to create the column for.
-     *
-     * @return static  A new column instance.
+     * @return static A new column instance.
      */
     public static function make(string $field): static
     {
@@ -48,51 +53,49 @@ abstract class Column implements Htmlable
     /**
      * Set column label.
      *
-     * @param  string  $label
      *
      * @return $this
      */
     public function label(string $label): static
     {
         $this->label = $label;
+
         return $this;
     }
-
 
     /**
      * Set column sortable.
      *
-     * @param  bool  $sortable
      *
      * @return $this
      */
     public function sortable(bool $sortable = true): static
     {
         $this->sortable = $sortable;
+
         return $this;
     }
 
     /**
-     * @param  bool  $searchable
-     *
      * @return $this
      */
     public function searchable(bool $searchable = true): static
     {
         $this->searchable = $searchable;
+
         return $this;
     }
 
     /**
      * Set column hidden.
      *
-     * @param  bool|Closure  $hidden
      *
      * @return $this
      */
     public function hidden(bool|Closure $hidden = true): static
     {
         $this->hidden = value($hidden);
+
         return $this;
     }
 
@@ -100,13 +103,13 @@ abstract class Column implements Htmlable
      * Set column hidden on breakepoints.
      * Example: hideOn(['sm', 'md'])
      *
-     * @param  array  $breakpoints
      *
      * @return $this
      */
     public function hideOn(array $breakpoints): static
     {
         $this->responsiveHidden = $breakpoints;
+
         return $this;
     }
 
@@ -114,20 +117,19 @@ abstract class Column implements Htmlable
      * Set column format.
      * Example: format(fn($value) => $value * 2)
      *
-     * @param  Closure  $callback
      *
      * @return $this
      */
     public function format(Closure $callback): static
     {
         $this->formatCallback = $callback;
+
         return $this;
     }
 
     /**
      * Set column record.
      *
-     * @param  Model  $record
      *
      * @return $this
      */
@@ -135,6 +137,7 @@ abstract class Column implements Htmlable
     {
         $clone = clone $this;
         $clone->record = $record;
+
         return $clone;
     }
 
@@ -142,13 +145,13 @@ abstract class Column implements Htmlable
      * Set column view.
      * Example: view('components.table.columns.text')
      *
-     * @param  string  $view
      *
      * @return $this
      */
     public function view(string $view): static
     {
         $this->view = $view;
+
         return $this;
     }
 
@@ -195,8 +198,6 @@ abstract class Column implements Htmlable
      * Convert the column to a string.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -207,8 +208,6 @@ abstract class Column implements Htmlable
      * Convert the column to HTML.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function toHtml(): string
     {
@@ -219,11 +218,10 @@ abstract class Column implements Htmlable
      * Render the column.
      *
      * @throws Throwable
-     * @return string
      */
     public function render(): string
     {
-        if (!$this->record) {
+        if (! $this->record) {
             return '';
         }
 
@@ -257,7 +255,7 @@ abstract class Column implements Htmlable
 
     public function getValue(Model $record): mixed
     {
-        //Support relationships with dot notation
+        // Support relationships with dot notation
         if (str_contains($this->field, '.')) {
             return data_get($record, $this->field);
         }
@@ -278,11 +276,6 @@ abstract class Column implements Htmlable
 
     /**
      * Format the value.
-     *
-     * @param  mixed  $value
-     * @param  Model  $record
-     *
-     * @return mixed
      */
     abstract public function formatValue(mixed $value, Model $record): mixed;
 }

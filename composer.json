@@ -14,7 +14,8 @@
         "php": ">=8.2",
         "nyoncode/laravel-package-toolkit": "^1.0",
 	    "illuminate/collections": "^11.0|^12.0",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0",
+        "laravel/pint": "^1.25"
     },
     "autoload": {
         "psr-4": {
@@ -28,6 +29,9 @@
             ]
         }
     },
-    "minimum-stability": "stable",
+	"scripts": {
+		"pint": "./vendor/bin/pint"
+	},
+	"minimum-stability": "stable",
     "prefer-stable": true
 }
