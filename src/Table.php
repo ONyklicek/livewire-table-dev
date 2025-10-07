@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Support\Tables;
+namespace NyonCode\LivewireTable;
 
-use App\Support\Tables\Builders\QueryBuilder;
-use App\Support\Tables\Builders\RelationshipResolver;
-use App\Support\Tables\Concerns\HasActions;
-use App\Support\Tables\Concerns\HasColumns;
-use App\Support\Tables\Concerns\HasColumnToggle;
-use App\Support\Tables\Concerns\HasFilters;
-use App\Support\Tables\Concerns\HasGrouping;
-use App\Support\Tables\Concerns\HasPagination;
-use App\Support\Tables\Concerns\HasResponsiveScheme;
-use App\Support\Tables\Concerns\HasSavedFilters;
-use App\Support\Tables\Concerns\HasSubRows;
+use NyonCode\LivewireTable\Builders\QueryBuilder;
+use NyonCode\LivewireTable\Builders\RelationshipResolver;
+use NyonCode\LivewireTable\Concerns\HasActions;
+use NyonCode\LivewireTable\Concerns\HasColumns;
+use NyonCode\LivewireTable\Concerns\HasColumnToggle;
+use NyonCode\LivewireTable\Concerns\HasFilters;
+use NyonCode\LivewireTable\Concerns\HasGrouping;
+use NyonCode\LivewireTable\Concerns\HasPagination;
+use NyonCode\LivewireTable\Concerns\HasResponsiveScheme;
+use NyonCode\LivewireTable\Concerns\HasSavedFilters;
+use NyonCode\LivewireTable\Concerns\HasSubRows;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,10 +33,10 @@ class Table
     use HasSavedFilters;
 
     public Model|Builder|Collection $model;
-    protected ?string $livewireComponent = null;
-    protected array $data = [];
-    protected ?int $liveUpdateInterval = null;
-    protected array $state = [];
+    public ?string $livewireComponent = null;
+    public array $data = [];
+    public ?int $liveUpdateInterval = null;
+    public array $state = [];
 
     public function __construct()
     {
@@ -60,19 +60,6 @@ class Table
     public function model(Model|Builder|Collection $model): static
     {
         $this->model = $model;
-        return $this;
-    }
-
-    /**
-     * Set the live update interval for the table.
-     *
-     * @param  int  $seconds
-     *
-     * @return $this
-     */
-    public function liveUpdate(int $seconds): static
-    {
-        $this->liveUpdateInterval = $seconds;
         return $this;
     }
 
@@ -244,117 +231,5 @@ class Table
 
         // 6. Get final query and paginate
         return $queryBuilder->get()->paginate($this->perPage);
-    }
-
-    /**
-     * Eager load the relationships.
-     *
-     * @param  Builder  $query
-     *
-     * @return Builder
-     *
-     * @deprecated Use RelationshipResolver::eagerLoad() instead
-     */
-    public function eagerLoadRelationships(Builder $query): Builder
-    {
-        $relationships = RelationshipResolver::extractRelationships($this->columns);
-        return RelationshipResolver::eagerLoad($query, $relationships);
-    }
-
-    /**
-     * Apply the filters to the query.
-     *
-     * @param  Builder  $query
-     *
-     * @return Builder
-     *
-     * @deprecated Use QueryBuilder instead
-     */
-    private function applyFilters(Builder $query): Builder
-    {
-        foreach ($this->filters as $filter) {
-            $value = $this->state['filters'][$filter->getName()] ?? null;
-            if ($value !== null && $value !== '') {
-                $query = $filter->apply($query, $value);
-            }
-        }
-
-        foreach ($this->globalFilters as $filter) {
-            $value = $this->state['filters'][$filter->getName()] ?? null;
-            if ($value !== null && $value !== '') {
-                $query = $filter->apply($query, $value);
-            }
-        }
-
-        return $query;
-    }
-
-    /**
-     * Apply the sorting to the query.
-     *
-     * @param  Builder  $query
-     *
-     * @return Builder
-     *
-     * @deprecated Use QueryBuilder::multiSort() instead
-     */
-    private function applySorting(Builder $query): Builder
-    {
-        $sortColumn = $this->state['sortColumn'] ?? '';
-        $sortDirection = $this->state['sortDirection'] ?? 'asc';
-
-        if (empty($sortColumn)) {
-            return $query;
-        }
-
-        if (str_contains($sortColumn, '.')) {
-            [$relation, $relatedField] = explode('.', $sortColumn, 2);
-            return $query->with([
-                $relation => function ($q) use ($relatedField, $sortDirection) {
-                    $q->orderBy($relatedField, $sortDirection);
-                }
-            ]);
-        }
-
-        return $query->orderBy($sortColumn, $sortDirection);
-    }
-
-    /**
-     * Apply the search to the query.
-     *
-     * @param  Builder  $query
-     *
-     * @return Builder
-     *
-     * @deprecated Use QueryBuilder::search() instead
-     */
-    private function applySearch(Builder $query): Builder
-    {
-        $search = $this->state['search'] ?? '';
-
-        if (empty($search)) {
-            return $query;
-        }
-
-        $searchableColumns = $this->columns->filter(fn($col) => $col->isSearchable());
-
-        if ($searchableColumns->isEmpty()) {
-            return $query;
-        }
-
-        return $query->where(function ($q) use ($searchableColumns, $search) {
-            foreach ($searchableColumns as $column) {
-                $field = $column->getField();
-
-                if (str_contains($field, '.')) {
-                    [$relation, $relatedField] = explode('.', $field, 2);
-                    $q->orWhereHas($relation, function ($query) use ($relatedField, $search) {
-                        $query->where($relatedField, 'like', "%$search%");
-                    });
-                } else {
-                    $q->orWhere($field, 'like', "%$search%");
-                }
-            }
-        });
     }
 }
