@@ -18,14 +18,15 @@ class LivewireTableServiceProvider extends PackageServiceProvider implements Pac
      * @return void
      * @throws Exception
      */
-    public function configure(Packager $packager): void
+    final public function configure(Packager $packager): void
     {
         $packager->name('Laravel Livewire Table')
             ->hasViews()
+            ->hasTranslations()
             ->hasAbout();
     }
 
-    public function aboutData(): array
+    final public function aboutData(): array
     {
         return [
             'Author' => 'Ondrej Nyklicek',
