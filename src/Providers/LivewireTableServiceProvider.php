@@ -2,25 +2,22 @@
 
 namespace NyonCode\LivewireTable\Providers;
 
+use Exception;
 use NyonCode\LaravelPackageToolkit\Contracts\Packable;
 use NyonCode\LaravelPackageToolkit\Packager;
 use NyonCode\LaravelPackageToolkit\PackageServiceProvider;
-use Exception;
-
 
 class LivewireTableServiceProvider extends PackageServiceProvider implements Packable
 {
     /**
      * Configures the package. This method is called after the package is registered.
      *
-     * @param Packager $packager
      *
-     * @return void
      * @throws Exception
      */
     final public function configure(Packager $packager): void
     {
-        $packager->name('Laravel Livewire Table')
+        $packager->name('Livewire Table')
             ->hasViews()
             ->hasTranslations()
             ->hasAbout();

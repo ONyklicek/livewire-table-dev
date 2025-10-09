@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Support\Tables\Filters;
+namespace NyonCode\LivewireTable\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
 class SelectFilter extends Filter
 {
-
     protected array $options = [];
+
     protected ?string $placeholder = null;
 
     public function options(array $options): static
     {
         $this->options = $options;
+
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function apply(Builder $query, mixed $value): Builder
     {
@@ -28,7 +29,7 @@ class SelectFilter extends Filter
         if (str_contains($this->column, '.')) {
             [$relation, $column] = explode('.', $this->column, 2);
 
-            return $query->whereHas($relation, fn($q) => $q->where($column, $value));
+            return $query->whereHas($relation, fn ($q) => $q->where($column, $value));
         }
 
         return $query->where($this->column, $value);
@@ -40,12 +41,12 @@ class SelectFilter extends Filter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(): string
     {
         return view('components.table.filters.select', [
-            'filter' => $this
+            'filter' => $this,
         ])->render();
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Support\Tables\Concerns;
+namespace NyonCode\LivewireTable\Concerns;
 
 use Illuminate\Support\Collection;
 
 trait HasFilters
 {
     protected Collection $filters;
+
     protected Collection $globalFilters;
 
     /**
@@ -16,13 +17,13 @@ trait HasFilters
      *     Filter::make('email'),
      * ])
      *
-     * @param  array  $filters
      *
      * @return $this
      */
     public function filters(array $filters): static
     {
         $this->filters = collect($filters);
+
         return $this;
     }
 
@@ -33,20 +34,18 @@ trait HasFilters
      *     Filter::make('email'),
      * ])
      *
-     * @param  array  $filters
      *
      * @return $this
      */
     public function globalFilters(array $filters): static
     {
         $this->globalFilters = collect($filters);
+
         return $this;
     }
 
     /**
      * Get all filters.
-     *
-     * @return Collection
      */
     public function getFilters(): Collection
     {
@@ -55,8 +54,6 @@ trait HasFilters
 
     /**
      * Get all global filters.
-     *
-     * @return Collection
      */
     public function getGlobalFilters(): Collection
     {

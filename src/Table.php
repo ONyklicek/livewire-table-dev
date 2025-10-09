@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables;
+namespace NyonCode\LivewireTable;
 
 use App\Support\Tables\Builders\QueryBuilder;
 use App\Support\Tables\Builders\RelationshipResolver;
@@ -22,20 +22,24 @@ use Throwable;
 
 class Table
 {
-    use HasColumns;
-    use HasFilters;
     use HasActions;
+    use HasColumns;
+    use HasColumnToggle;
+    use HasFilters;
+    use HasGrouping;
     use HasPagination;
     use HasResponsiveScheme;
-    use HasGrouping;
-    use HasSubRows;
-    use HasColumnToggle;
     use HasSavedFilters;
+    use HasSubRows;
 
     public Model|Builder|Collection $model;
-    protected ?string $livewireComponent = null;
+
+    protected string|null $livewireComponent = null;
+
     protected array $data = [];
-    protected ?int $liveUpdateInterval = null;
+
+    protected int|null $liveUpdateInterval = null;
+
     protected array $state = [];
 
     public function __construct()
@@ -54,58 +58,57 @@ class Table
 
     public static function make(): static
     {
-        return new static();
+        return new static;
     }
 
     public function model(Model|Builder|Collection $model): static
     {
         $this->model = $model;
+
         return $this;
     }
 
     /**
      * Set the live update interval for the table.
      *
-     * @param  int  $seconds
      *
      * @return $this
      */
     public function liveUpdate(int $seconds): static
     {
         $this->liveUpdateInterval = $seconds;
+
         return $this;
     }
 
     /**
      * Set the Livewire component for the table.
      *
-     * @param  string  $component
      *
      * @return $this
      */
     public function setLivewireComponent(string $component): static
     {
         $this->livewireComponent = $component;
+
         return $this;
     }
 
     /**
      * Set the state for the table.
      *
-     * @param  array  $state
      *
      * @return $this
      */
     public function setState(array $state): static
     {
         $this->state = $state;
+
         return $this;
     }
 
     /**
      * Get the model for the table.
-     *
-     * @return Model|Builder
      */
     public function getModel(): Model|Builder
     {
@@ -116,8 +119,6 @@ class Table
      * Convert the table to a string.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -128,8 +129,6 @@ class Table
      * Convert the table to HTML.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function toHtml(): string
     {
@@ -138,8 +137,6 @@ class Table
 
     /**
      * Render the table.
-     *
-     * @return View
      */
     public function render(): View
     {
@@ -184,8 +181,6 @@ class Table
 
     /**
      * Get the data for the table.
-     *
-     * @return LengthAwarePaginator|Collection
      */
     public function getData(): LengthAwarePaginator|Collection
     {
@@ -223,13 +218,13 @@ class Table
 
         // Apply search
         $search = $this->state['search'] ?? '';
-        if (!empty($search)) {
+        if (! empty($search)) {
             $searchableFields = $this->columns
-                ->filter(fn($col) => $col->isSearchable())
-                ->map(fn($col) => $col->getField())
+                ->filter(fn ($col) => $col->isSearchable())
+                ->map(fn ($col) => $col->getField())
                 ->toArray();
 
-            if (!empty($searchableFields)) {
+            if (! empty($searchableFields)) {
                 $queryBuilder->search($searchableFields, $search);
             }
         }
@@ -238,7 +233,7 @@ class Table
         $sortColumn = $this->state['sortColumn'] ?? '';
         $sortDirection = $this->state['sortDirection'] ?? 'asc';
 
-        if (!empty($sortColumn)) {
+        if (! empty($sortColumn)) {
             $queryBuilder->multiSort([$sortColumn => $sortDirection]);
         }
 
@@ -249,24 +244,21 @@ class Table
     /**
      * Eager load the relationships.
      *
-     * @param  Builder  $query
      *
-     * @return Builder
      *
      * @deprecated Use RelationshipResolver::eagerLoad() instead
      */
     public function eagerLoadRelationships(Builder $query): Builder
     {
         $relationships = RelationshipResolver::extractRelationships($this->columns);
+
         return RelationshipResolver::eagerLoad($query, $relationships);
     }
 
     /**
      * Apply the filters to the query.
      *
-     * @param  Builder  $query
      *
-     * @return Builder
      *
      * @deprecated Use QueryBuilder instead
      */
@@ -292,9 +284,7 @@ class Table
     /**
      * Apply the sorting to the query.
      *
-     * @param  Builder  $query
      *
-     * @return Builder
      *
      * @deprecated Use QueryBuilder::multiSort() instead
      */
@@ -309,10 +299,11 @@ class Table
 
         if (str_contains($sortColumn, '.')) {
             [$relation, $relatedField] = explode('.', $sortColumn, 2);
+
             return $query->with([
                 $relation => function ($q) use ($relatedField, $sortDirection) {
                     $q->orderBy($relatedField, $sortDirection);
-                }
+                },
             ]);
         }
 
@@ -322,9 +313,7 @@ class Table
     /**
      * Apply the search to the query.
      *
-     * @param  Builder  $query
      *
-     * @return Builder
      *
      * @deprecated Use QueryBuilder::search() instead
      */
@@ -336,7 +325,7 @@ class Table
             return $query;
         }
 
-        $searchableColumns = $this->columns->filter(fn($col) => $col->isSearchable());
+        $searchableColumns = $this->columns->filter(fn ($col) => $col->isSearchable());
 
         if ($searchableColumns->isEmpty()) {
             return $query;

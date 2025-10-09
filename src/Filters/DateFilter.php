@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Filters;
+namespace NyonCode\LivewireTable\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
@@ -9,7 +9,7 @@ class DateFilter extends Filter
     protected ?string $operator = '=';
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function apply(Builder $query, mixed $value): Builder
     {
@@ -29,12 +29,12 @@ class DateFilter extends Filter
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(): string
     {
         return view('components.table.filters.date', [
-            'filter' => $this
+            'filter' => $this,
         ])->render();
     }
 }

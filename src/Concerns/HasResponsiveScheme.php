@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Concerns;
+namespace NyonCode\LivewireTable\Concerns;
 
 trait HasResponsiveScheme
 {
@@ -9,20 +9,18 @@ trait HasResponsiveScheme
     /**
      * Set responsive scheme.
      *
-     * @param  array  $scheme
      *
      * @return $this
      */
     public function scheme(array $scheme): static
     {
         $this->scheme = $scheme;
+
         return $this;
     }
 
     /**
      * Get responsive scheme.
-     *
-     * @return array
      */
     public function getScheme(): array
     {

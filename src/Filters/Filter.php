@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Filters;
+namespace NyonCode\LivewireTable\Filters;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,19 +9,21 @@ use Throwable;
 abstract class Filter implements Htmlable
 {
     protected string $name;
+
     protected string $column;
+
     protected ?string $label = null;
+
     protected mixed $default = null;
+
     protected ?string $operator = null;
+
     protected ?string $placeholder = null;
 
     protected bool $isGlobal = false;
 
     /**
      * Create a new filter.
-     *
-     * @param  string       $name
-     * @param  string|null  $column
      */
     public function __construct(string $name, ?string $column = null)
     {
@@ -32,11 +34,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Create a new filter.
-     *
-     * @param  string       $name
-     * @param  string|null  $column
-     *
-     * @return static
      */
     public static function make(string $name, ?string $column = null): static
     {
@@ -46,82 +43,75 @@ abstract class Filter implements Htmlable
     /**
      * Set the label.
      *
-     * @param  string  $label
      *
      * @return $this
      */
     public function label(string $label): static
     {
         $this->label = $label;
+
         return $this;
     }
 
     /**
      * Set the default value.
      *
-     * @param  mixed  $default
      *
      * @return $this
      */
     public function default(mixed $default): static
     {
         $this->default = $default;
+
         return $this;
     }
 
     /**
      * Set the filter to be global.
      *
-     * @param  bool  $isGlobal
      *
      * @return $this
      */
     public function global(bool $isGlobal = true): static
     {
         $this->isGlobal = $isGlobal;
+
         return $this;
     }
 
     /**
      * Apply the filter to the query.
-     *
-     * @param  Builder  $query
-     * @param  mixed    $value
-     *
-     * @return Builder
      */
     abstract public function apply(Builder $query, mixed $value): Builder;
 
     /**
      * Set the placeholder.
      *
-     * @param  string  $placeholder
      *
      * @return $this
      */
     public function placeholder(string $placeholder): static
     {
         $this->placeholder = $placeholder;
+
         return $this;
     }
 
     /**
      * Set the operator.
      *
-     * @param  string  $operator
      *
      * @return $this
      */
     public function operator(string $operator): static
     {
         $this->operator = $operator;
+
         return $this;
     }
 
     /**
      * Get the name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -130,8 +120,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Get the column.
-     *
-     * @return string
      */
     public function getColumn(): string
     {
@@ -140,8 +128,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Get the label.
-     *
-     * @return string
      */
     public function getLabel(): string
     {
@@ -150,8 +136,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Get the default value.
-     *
-     * @return mixed
      */
     public function getDefault(): mixed
     {
@@ -160,8 +144,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Get the placeholder.
-     *
-     * @return string|null
      */
     public function getPlaceholder(): ?string
     {
@@ -170,8 +152,6 @@ abstract class Filter implements Htmlable
 
     /**
      * Check if the filter is global.
-     *
-     * @return bool
      */
     public function isGlobal(): bool
     {
@@ -182,8 +162,6 @@ abstract class Filter implements Htmlable
      * Convert the filter to a string.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -194,8 +172,6 @@ abstract class Filter implements Htmlable
      * Render the filter.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function toHtml(): string
     {
@@ -206,19 +182,11 @@ abstract class Filter implements Htmlable
      * Render the filter.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     abstract public function render(): string;
 
     /**
      * Apply a condition to the query.
-     *
-     * @param  Builder  $query
-     * @param  string   $column
-     * @param  mixed    $value
-     *
-     * @return Builder
      */
     public function applyCondition(Builder $query, string $column, mixed $value): Builder
     {
