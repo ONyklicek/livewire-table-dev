@@ -33,13 +33,9 @@ class Table
     use HasSubRows;
 
     public Model|Builder|Collection $model;
-
-    protected string|null $livewireComponent = null;
-
+    protected ?string $livewireComponent = null;
     protected array $data = [];
-
-    protected int|null $liveUpdateInterval = null;
-
+    protected ?int $liveUpdateInterval = null;
     protected array $state = [];
 
     public function __construct()
@@ -58,7 +54,7 @@ class Table
 
     public static function make(): static
     {
-        return new static;
+        return new static();
     }
 
     public function model(Model|Builder|Collection $model): static
@@ -71,6 +67,7 @@ class Table
     /**
      * Set the live update interval for the table.
      *
+     * @param  int  $seconds
      *
      * @return $this
      */
@@ -84,6 +81,7 @@ class Table
     /**
      * Set the Livewire component for the table.
      *
+     * @param  string  $component
      *
      * @return $this
      */
@@ -97,6 +95,7 @@ class Table
     /**
      * Set the state for the table.
      *
+     * @param  array  $state
      *
      * @return $this
      */
@@ -109,6 +108,8 @@ class Table
 
     /**
      * Get the model for the table.
+     *
+     * @return Model|Builder
      */
     public function getModel(): Model|Builder
     {
@@ -119,6 +120,8 @@ class Table
      * Convert the table to a string.
      *
      * @throws Throwable
+     *
+     * @return string
      */
     public function __toString(): string
     {
@@ -129,6 +132,8 @@ class Table
      * Convert the table to HTML.
      *
      * @throws Throwable
+     *
+     * @return string
      */
     public function toHtml(): string
     {
@@ -137,6 +142,8 @@ class Table
 
     /**
      * Render the table.
+     *
+     * @return View
      */
     public function render(): View
     {
@@ -181,6 +188,8 @@ class Table
 
     /**
      * Get the data for the table.
+     *
+     * @return LengthAwarePaginator|Collection
      */
     public function getData(): LengthAwarePaginator|Collection
     {
@@ -218,13 +227,13 @@ class Table
 
         // Apply search
         $search = $this->state['search'] ?? '';
-        if (! empty($search)) {
+        if (!empty($search)) {
             $searchableFields = $this->columns
-                ->filter(fn ($col) => $col->isSearchable())
-                ->map(fn ($col) => $col->getField())
+                ->filter(fn($col) => $col->isSearchable())
+                ->map(fn($col) => $col->getField())
                 ->toArray();
 
-            if (! empty($searchableFields)) {
+            if (!empty($searchableFields)) {
                 $queryBuilder->search($searchableFields, $search);
             }
         }
@@ -233,7 +242,7 @@ class Table
         $sortColumn = $this->state['sortColumn'] ?? '';
         $sortDirection = $this->state['sortDirection'] ?? 'asc';
 
-        if (! empty($sortColumn)) {
+        if (!empty($sortColumn)) {
             $queryBuilder->multiSort([$sortColumn => $sortDirection]);
         }
 

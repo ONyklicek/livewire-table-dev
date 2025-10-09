@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Builders;
+namespace NyonCode\LivewireTable\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

@@ -7,15 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class ImageColumn extends Column
 {
     protected string $size = 'md';
-
     protected bool $circular = false;
-
-    protected string|null $defaultImage = null;
-    protected string|null $view = "livewire-table::components.table.columns.image";
+    protected ?string $defaultImage = null;
 
     /**
      * Set size.
      *
+     * @param  string  $size
      *
      * @return $this
      */
@@ -29,6 +27,7 @@ class ImageColumn extends Column
     /**
      * Set circular.
      *
+     * @param  bool  $circular
      *
      * @return $this
      */
@@ -42,6 +41,7 @@ class ImageColumn extends Column
     /**
      * Set default image.
      *
+     * @param  string  $url
      *
      * @return $this
      */
@@ -54,6 +54,8 @@ class ImageColumn extends Column
 
     /**
      * Get size.
+     *
+     * @return string
      */
     public function getSize(): string
     {
@@ -62,6 +64,8 @@ class ImageColumn extends Column
 
     /**
      * Get circular.
+     *
+     * @return bool
      */
     public function isCircular(): bool
     {
@@ -70,6 +74,11 @@ class ImageColumn extends Column
 
     /**
      * Format the value.
+     *
+     * @param  mixed  $value
+     * @param  Model  $record
+     *
+     * @return mixed
      */
     public function formatValue(mixed $value, Model $record): mixed
     {

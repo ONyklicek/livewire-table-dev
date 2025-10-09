@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Support\Tables\Livewire\Concerns;
+namespace NyonCode\LivewireTable\Livewire\Concerns;
 
-use App\Models\TableFilterPreset;
-use App\Support\Tables\Table;
+use NyonCode\LivewireTable\Models\TableFilterPreset;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use NyonCode\LivewireTable\Table;
 
 trait HasTable
 {

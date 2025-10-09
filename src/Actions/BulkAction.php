@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Actions;
+namespace NyonCode\LivewireTable\Actions;
 
 class BulkAction extends Action
 {

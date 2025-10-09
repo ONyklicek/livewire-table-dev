@@ -10,6 +10,12 @@ class SelectFilter extends Filter
 
     protected ?string $placeholder = null;
 
+    /**
+     * Set options.
+     *
+     *
+     * @return $this
+     */
     public function options(array $options): static
     {
         $this->options = $options;
@@ -35,6 +41,9 @@ class SelectFilter extends Filter
         return $query->where($this->column, $value);
     }
 
+    /**
+     * Get options.
+     */
     public function getOptions(): array
     {
         return $this->options;

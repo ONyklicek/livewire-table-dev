@@ -1,6 +1,6 @@
 <?php
 
-namespace NyonCode\LivewireTable\Concerns;
+namespace App\Support\Tables\Concerns;
 
 trait HasPagination
 {
@@ -12,6 +12,7 @@ trait HasPagination
      * Set per page.
      * Example: perPage(15)
      *
+     * @param  int  $perPage
      *
      * @return $this
      */
@@ -26,6 +27,7 @@ trait HasPagination
      * Set page options.
      * Example: pageOptions([15, 25, 50, 100])
      *
+     * @param  array  $options
      *
      * @return $this
      */
@@ -38,6 +40,8 @@ trait HasPagination
 
     /**
      * Get per page.
+     *
+     * @return int
      */
     public function getPerPage(): int
     {
@@ -46,6 +50,8 @@ trait HasPagination
 
     /**
      * Get page options.
+     *
+     * @return array
      */
     public function getPageOptions(): array
     {

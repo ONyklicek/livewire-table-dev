@@ -3,6 +3,7 @@
 namespace NyonCode\LivewireTable\Concerns;
 
 use Illuminate\Support\Collection;
+use NyonCode\LivewireTable\Models\TableFilterPreset;
 
 trait HasSavedFilters
 {
@@ -12,6 +13,12 @@ trait HasSavedFilters
 
     protected bool $presetsEnabled = false;
 
+    /**
+     * Set presets enabled.
+     *
+     *
+     * @return $this
+     */
     public function enablePresets(bool $enabled = true): static
     {
         $this->presetsEnabled = $enabled;
@@ -19,6 +26,12 @@ trait HasSavedFilters
         return $this;
     }
 
+    /**
+     * Set preset model.
+     *
+     *
+     * @return $this
+     */
     public function presetModel(string $model): static
     {
         $this->presetModel = $model;
@@ -26,6 +39,9 @@ trait HasSavedFilters
         return $this;
     }
 
+    /**
+     * Get presets.
+     */
     public function getPresets(): Collection
     {
         if (! $this->presetsEnabled || ! class_exists($this->presetModel)) {
@@ -38,11 +54,17 @@ trait HasSavedFilters
             ->get();
     }
 
+    /**
+     * Check if presets are enabled.
+     */
     public function isPresetsEnabled(): bool
     {
         return $this->presetsEnabled;
     }
 
+    /**
+     * Get active preset id.
+     */
     public function getActivePresetId(): ?int
     {
         return $this->activePresetId;

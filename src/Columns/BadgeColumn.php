@@ -19,6 +19,7 @@ class BadgeColumn extends Column
     /**
      * Set colors.
      *
+     * @param  array  $colors
      *
      * @return $this
      */
@@ -32,6 +33,7 @@ class BadgeColumn extends Column
     /**
      * Set icons.
      *
+     * @param  array  $icons
      *
      * @return $this
      */
@@ -45,6 +47,7 @@ class BadgeColumn extends Column
     /**
      * Set size.
      *
+     * @param  string  $size
      *
      * @return $this
      */
@@ -57,6 +60,10 @@ class BadgeColumn extends Column
 
     /**
      * Get color.
+     *
+     * @param  mixed  $value
+     *
+     * @return string
      */
     public function getColor(mixed $value): string
     {
@@ -65,6 +72,10 @@ class BadgeColumn extends Column
 
     /**
      * Get icon.
+     *
+     * @param  mixed  $value
+     *
+     * @return string|null
      */
     public function getIcon(mixed $value): ?string
     {
@@ -78,6 +89,11 @@ class BadgeColumn extends Column
 
     /**
      * Format the value.
+     *
+     * @param  mixed  $value
+     * @param  Model  $record
+     *
+     * @return mixed
      */
     public function formatValue(mixed $value, Model $record): mixed
     {

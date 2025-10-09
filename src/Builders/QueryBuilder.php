@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Support\Tables\Builders;
+namespace NyonCode\LivewireTable\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 
 class QueryBuilder
 {
-    protected Builder $query;
+    public Builder $query;
 
     /**
      * Create a new instance of the query builder.
