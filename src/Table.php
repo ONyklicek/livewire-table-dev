@@ -2,17 +2,17 @@
 
 namespace NyonCode\LivewireTable;
 
-use App\Support\Tables\Builders\QueryBuilder;
-use App\Support\Tables\Builders\RelationshipResolver;
-use App\Support\Tables\Concerns\HasActions;
-use App\Support\Tables\Concerns\HasColumns;
-use App\Support\Tables\Concerns\HasColumnToggle;
-use App\Support\Tables\Concerns\HasFilters;
-use App\Support\Tables\Concerns\HasGrouping;
-use App\Support\Tables\Concerns\HasPagination;
-use App\Support\Tables\Concerns\HasResponsiveScheme;
-use App\Support\Tables\Concerns\HasSavedFilters;
-use App\Support\Tables\Concerns\HasSubRows;
+use NyonCode\LivewireTable\Builders\QueryBuilder;
+use NyonCode\LivewireTable\Builders\RelationshipResolver;
+use NyonCode\LivewireTable\Concerns\HasActions;
+use NyonCode\LivewireTable\Concerns\HasColumns;
+use NyonCode\LivewireTable\Concerns\HasColumnToggle;
+use NyonCode\LivewireTable\Concerns\HasFilters;
+use NyonCode\LivewireTable\Concerns\HasGrouping;
+use NyonCode\LivewireTable\Concerns\HasPagination;
+use NyonCode\LivewireTable\Concerns\HasResponsiveScheme;
+use NyonCode\LivewireTable\Concerns\HasSavedFilters;
+use NyonCode\LivewireTable\Concerns\HasSubRows;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,10 +33,10 @@ class Table
     use HasSubRows;
 
     public Model|Builder|Collection $model;
-    protected ?string $livewireComponent = null;
-    protected array $data = [];
-    protected ?int $liveUpdateInterval = null;
-    protected array $state = [];
+    public string|null $livewireComponent = null;
+    public array $data = [];
+    public int|null $liveUpdateInterval = null;
+    public array $state = [];
 
     public function __construct()
     {
@@ -137,7 +137,7 @@ class Table
      */
     public function toHtml(): string
     {
-        return $this->render()->render();
+        return $this->render();
     }
 
     /**
@@ -145,7 +145,7 @@ class Table
      *
      * @return View
      */
-    public function render(): View
+    public function render(): string
     {
         $data = $this->groupBy
             ? $this->getGroupedData()
@@ -183,7 +183,7 @@ class Table
             'tableFilters' => $this->state['filters'] ?? [],
         ];
 
-        return view('components.table.table', $this->data);
+        return view('livewire-table::components.table.table', $this->data)->render();
     }
 
     /**

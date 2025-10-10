@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Tables\Concerns;
+namespace NyonCode\LivewireTable\Concerns;
 
 trait HasPagination
 {
