@@ -17,7 +17,6 @@ class TextColumn extends Column
     /**
      * Set column copyable.
      *
-     * @param  bool  $copyable
      *
      * @return $this
      */
@@ -31,7 +30,6 @@ class TextColumn extends Column
     /**
      * Set column limit.
      *
-     * @param  int  $limit
      *
      * @return $this
      */
@@ -45,7 +43,6 @@ class TextColumn extends Column
     /**
      * Set column placeholder.
      *
-     * @param  string  $placeholder
      *
      * @return $this
      */
@@ -58,8 +55,6 @@ class TextColumn extends Column
 
     /**
      * Check if the column is copyable.
-     *
-     * @return bool
      */
     public function isCopyable(): bool
     {

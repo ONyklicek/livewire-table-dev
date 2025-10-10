@@ -28,8 +28,6 @@ class Action implements Htmlable
 
     /**
      * Create a new action.
-     *
-     * @param  string  $name
      */
     public function __construct(string $name)
     {
@@ -39,10 +37,6 @@ class Action implements Htmlable
 
     /**
      * Create a new action.
-     *
-     * @param  string  $name
-     *
-     * @return static
      */
     public static function make(string $name): static
     {
@@ -52,7 +46,6 @@ class Action implements Htmlable
     /**
      * Set the label.
      *
-     * @param  string  $label
      *
      * @return $this
      */
@@ -66,7 +59,6 @@ class Action implements Htmlable
     /**
      * Set the icon.
      *
-     * @param  string  $icon
      *
      * @return $this
      */
@@ -80,7 +72,6 @@ class Action implements Htmlable
     /**
      * Set the color.
      *
-     * @param  string  $color
      *
      * @return $this
      */
@@ -94,7 +85,6 @@ class Action implements Htmlable
     /**
      * Set the action.
      *
-     * @param  Closure  $action
      *
      * @return $this
      */
@@ -108,7 +98,6 @@ class Action implements Htmlable
     /**
      * Set the modal.
      *
-     * @param  Modal  $modal
      *
      * @return $this
      */
@@ -122,8 +111,6 @@ class Action implements Htmlable
     /**
      * Require confirmation.
      *
-     * @param  string  $title
-     * @param  string  $text
      *
      * @return $this
      */
@@ -140,10 +127,6 @@ class Action implements Htmlable
 
     /**
      * Execute the action.
-     *
-     * @param $record
-     *
-     * @return mixed
      */
     public function execute($record): mixed
     {
@@ -156,8 +139,6 @@ class Action implements Htmlable
 
     /**
      * Get the name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -166,8 +147,6 @@ class Action implements Htmlable
 
     /**
      * Get the label.
-     *
-     * @return string
      */
     public function getLabel(): string
     {
@@ -176,8 +155,6 @@ class Action implements Htmlable
 
     /**
      * Get the icon.
-     *
-     * @return string|null
      */
     public function getIcon(): ?string
     {
@@ -186,8 +163,6 @@ class Action implements Htmlable
 
     /**
      * Get the color.
-     *
-     * @return string
      */
     public function getColor(): string
     {
@@ -196,8 +171,6 @@ class Action implements Htmlable
 
     /**
      * Get the modal.
-     *
-     * @return Modal|null
      */
     public function getModal(): ?Modal
     {
@@ -206,8 +179,6 @@ class Action implements Htmlable
 
     /**
      * Check if the action requires confirmation.
-     *
-     * @return bool
      */
     public function requiresConfirmation(): bool
     {
@@ -216,8 +187,6 @@ class Action implements Htmlable
 
     /**
      * Get the confirmation title.
-     *
-     * @return string|null
      */
     public function getConfirmationTitle(): ?string
     {
@@ -226,8 +195,6 @@ class Action implements Htmlable
 
     /**
      * Get the confi    rmation text.
-     *
-     * @return string|null
      */
     public function getConfirmationText(): ?string
     {
@@ -238,8 +205,6 @@ class Action implements Htmlable
      * Render the action to HTML.
      *
      * @throws Throwable
-     *
-     * @return string
      */
     public function toHtml(): string
     {

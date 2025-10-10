@@ -2,10 +2,10 @@
 
 namespace NyonCode\LivewireTable\Livewire\Concerns;
 
-use NyonCode\LivewireTable\Models\TableFilterPreset;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use NyonCode\LivewireTable\Models\TableFilterPreset;
 use NyonCode\LivewireTable\Table;
 
 trait HasTable

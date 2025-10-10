@@ -11,9 +11,9 @@ class EditableColumn extends Column
 
     protected array $options = [];
 
-    protected string|null $rules = null;
+    protected ?string $rules = null;
 
-    protected Closure|null $onSave = null;
+    protected ?Closure $onSave = null;
 
     public function inputType(string $type): static
     {
@@ -50,8 +50,6 @@ class EditableColumn extends Column
 
     /**
      * Get options.
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -60,8 +58,6 @@ class EditableColumn extends Column
 
     /**
      * Get rules.
-     *
-     * @return string|null
      */
     public function getRules(): ?string
     {
@@ -70,11 +66,6 @@ class EditableColumn extends Column
 
     /**
      * Save the value.
-     *
-     * @param  Model   $record
-     * @param  string  $value
-     *
-     * @return void
      */
     public function save(Model $record, string $value): void
     {
@@ -82,13 +73,13 @@ class EditableColumn extends Column
             ($this->onSave)($record, $value);
         } else {
             $record->update([
-                $this->field => $value
+                $this->field => $value,
             ]);
         }
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(): string
     {
@@ -98,7 +89,7 @@ class EditableColumn extends Column
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function formatValue(mixed $value, Model $record): mixed
     {
