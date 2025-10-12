@@ -54,7 +54,7 @@ class SelectFilter extends Filter
      */
     public function render(): string
     {
-        return view('components.table.filters.select', [
+        return view('livewire-table::components.table.filters.select', [
             'filter' => $this,
         ])->render();
     }

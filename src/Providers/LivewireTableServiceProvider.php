@@ -18,6 +18,8 @@ class LivewireTableServiceProvider extends PackageServiceProvider implements Pac
     final public function configure(Packager $packager): void
     {
         $packager->name('Livewire Table')
+            ->hasConfig()
+            ->hasMigrations()
             ->hasViews()
             ->hasTranslations()
             ->hasAbout();

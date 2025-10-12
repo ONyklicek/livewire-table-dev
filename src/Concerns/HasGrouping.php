@@ -92,6 +92,7 @@ trait HasGrouping
 
     /**
      * Format group label.
+     *
      * Example: formatGroupLabel(fn($key, $items) => "{$key} ({$items->count()})")
      */
     protected function formatGroupLabel($key, $items): string

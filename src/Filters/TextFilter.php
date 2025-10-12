@@ -33,7 +33,7 @@ class TextFilter extends Filter
      */
     public function render(): string
     {
-        return view('components.table.filters.text', [
+        return view('livewire-table::components.table.filters.text', [
             'filter' => $this,
         ])->render();
     }

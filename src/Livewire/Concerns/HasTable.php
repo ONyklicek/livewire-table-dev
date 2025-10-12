@@ -5,6 +5,7 @@ namespace NyonCode\LivewireTable\Livewire\Concerns;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use NyonCode\LivewireTable\Columns\EditableColumn;
 use NyonCode\LivewireTable\Models\TableFilterPreset;
 use NyonCode\LivewireTable\Table;
 
@@ -161,7 +162,7 @@ trait HasTable
         $table = $this->table(Table::make());
         $column = $table->getColumns()->firstWhere('field', $columnField);
 
-        if (! $column instanceof \App\Tables\Columns\EditableColumn) {
+        if (! $column instanceof EditableColumn) {
             return;
         }
 

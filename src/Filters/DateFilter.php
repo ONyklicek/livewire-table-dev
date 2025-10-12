@@ -33,7 +33,7 @@ class DateFilter extends Filter
      */
     public function render(): string
     {
-        return view('components.table.filters.date', [
+        return view('livewire-table::components.table.filters.date', [
             'filter' => $this,
         ])->render();
     }
