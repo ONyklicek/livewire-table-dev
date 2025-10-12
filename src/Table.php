@@ -2,8 +2,7 @@
 
 namespace NyonCode\LivewireTable;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Contracts\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -138,7 +137,7 @@ class Table
     /**
      * Render the table.
      *
-     * @return View
+     * @return string
      */
     public function render(): string
     {
