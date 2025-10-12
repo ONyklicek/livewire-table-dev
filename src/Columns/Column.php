@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
+use NyonCode\LivewireTable\Concerns\HasAuthorizable;
 use Throwable;
 use UnitEnum;
 
@@ -22,7 +23,8 @@ abstract class Column implements Htmlable
 
     public bool $searchable = false;
 
-    public bool $hidden = false;
+    public bool $visible = true;
+    protected ?Closure $visibleCallback = null;
 
     protected array $responsiveHidden = [];
 
@@ -99,16 +101,36 @@ abstract class Column implements Htmlable
     }
 
     /**
-     * Set column hidden.
+     * Set column global visibility.
      *
+     * @param bool|Closure $visible True to show, false to hide
+     * @return $this
+     */
+    public function visible(bool|Closure $visible = true): static
+    {
+        if ($visible instanceof Closure) {
+            $this->visibleCallback = $visible;
+            $this->visible = true; // Will be evaluated later
+        } else {
+            $this->visible = $visible;
+            $this->visibleCallback = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Alias for visible(false) for better readability.
      *
      * @return $this
      */
     public function hidden(bool|Closure $hidden = true): static
     {
-        $this->hidden = value($hidden);
+        if ($hidden instanceof Closure) {
+            return $this->visible(fn() => !$hidden());
+        }
 
-        return $this;
+        return $this->visible(!$hidden);
     }
 
     /**
@@ -187,9 +209,32 @@ abstract class Column implements Htmlable
         return $this->searchable;
     }
 
+    /**
+     * Check if column is globally visible.
+     */
+    public function isVisible(): bool
+    {
+        if ($this->visibleCallback !== null) {
+            try {
+                return (bool) ($this->visibleCallback)();
+            } catch (Throwable $e) {
+                logger()->warning('Column visibility callback failed', [
+                    'column' => $this->field,
+                    'error' => $e->getMessage(),
+                ]);
+                return false; // Hide on error
+            }
+        }
+
+        return $this->visible;
+    }
+
+    /**
+     * Alias for !isVisible() for better readability.
+     */
     public function isHidden(): bool
     {
-        return $this->hidden;
+        return !$this->isVisible();
     }
 
     public function getResponsiveClasses(): string

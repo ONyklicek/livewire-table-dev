@@ -1,4 +1,18 @@
 {
-	"Columns": "Columns",
-	"Actions": "Actions"
+	"Columns": "Sloupce",
+	"Actions": "Akce",
+	"Filters": "Filtry",
+	"Saved Filters": "Uložené filtry",
+	"Save current filters": "Uložit aktuální filtry",
+	"Clear filters": "Vymazat filtry",
+	"No records": "Žádné záznamy",
+	"Selected": "Vybráno",
+	"Search": "Hledat",
+	"Show all": "Zobrazit vše",
+	"Save": "Uložit",
+	"Cancel": "Zrušit",
+	"Delete": "Smazat",
+	"Edit": "Upravit",
+	"Really?": "Opravdu?",
+	"This action cannot be undone.": "Tato akce je nevratná."
 }

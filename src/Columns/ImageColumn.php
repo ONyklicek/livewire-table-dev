@@ -9,6 +9,7 @@ class ImageColumn extends Column
     protected string $size = 'md';
 
     protected bool $circular = false;
+    protected ?string $view = "livewire-table::components.table.columns.image";
 
     protected ?string $defaultImage = null;
 

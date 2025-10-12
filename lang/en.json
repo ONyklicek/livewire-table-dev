@@ -1,4 +1,18 @@
 {
+	"Columns": "Columns",
+	"Actions": "Actions",
+	"Filters": "Filters",
+	"Saved Filters": "Saved Filters",
+	"Save current filters": "Save current filters",
+	"Clear filters": "Clear filters",
+	"No records": "No records",
+	"Selected": "Selected",
+	"Search": "Search",
+	"Show all": "Show all",
+	"Save": "Save",
+	"Cancel": "Cancel",
+	"Delete": "Delete",
+	"Edit": "Edit",
 	"Really?": "Really?",
 	"This action cannot be undone.": "This action cannot be undone."
 }

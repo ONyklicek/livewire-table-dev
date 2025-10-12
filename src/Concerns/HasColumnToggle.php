@@ -29,7 +29,7 @@ trait HasColumnToggle
     public function getVisibleColumns(): Collection
     {
         return $this->columns->filter(function ($column) {
-            return ! $column->isHidden() && $this->isColumnVisible($column->getField());
+            return $column->isVisible() && $this->isColumnVisible($column->getField());
         });
     }
 
@@ -43,7 +43,7 @@ trait HasColumnToggle
     public function getToggleableColumns(): Collection
     {
         return $this->columns->filter(function ($column) {
-            return ! $column->isHidden() && ! in_array($column->getField(), $this->alwaysVisibleColumns);
+            return ! $column->isVisible() && ! in_array($column->getField(), $this->alwaysVisibleColumns);
         });
     }
 
