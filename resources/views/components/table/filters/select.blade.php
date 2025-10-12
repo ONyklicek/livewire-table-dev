@@ -6,7 +6,7 @@
         wire:model.live="tableFilters.{{ $filter->getName() }}"
         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     >
-        <option value="">{{ $filter->getPlaceholder() ?? 'Vyberte...' }}</option>
+        <option value="">{{ $filter->getPlaceholder() ?? __('Select an option') . ' ...' }}</option>
         @foreach($filter->getOptions() as $value => $label)
             <option value="{{ $value }}">{{ $label }}</option>
         @endforeach

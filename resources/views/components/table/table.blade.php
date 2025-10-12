@@ -130,7 +130,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
                     </svg>
-                    <span>Sloupce</span>
+                    <span>{{ __('Columns') }}</span>
                 </button>
 
                 <div
@@ -141,12 +141,12 @@
                 >
                     <div class="p-3 space-y-2">
                         <div class="flex items-center justify-between mb-2 pb-2 border-b border-gray-200">
-                            <span class="text-sm font-medium text-gray-700">Viditelné sloupce</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Visible columns') }}</span>
                             <button
                                 wire:click="showAllColumns"
                                 class="text-xs text-blue-600 hover:text-blue-800"
                             >
-                                Zobrazit vše
+                                {{ __('Show all') }}
                             </button>
                         </div>
                         @foreach($toggleableColumns as $column)

@@ -14,5 +14,7 @@
 	"Delete": "Delete",
 	"Edit": "Edit",
 	"Really?": "Really?",
-	"This action cannot be undone.": "This action cannot be undone."
+	"This action cannot be undone.": "This action cannot be undone.",
+	"Visible columns": "Visible columns",
+	"Select an option": "Select an option"
 }
