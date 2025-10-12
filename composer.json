@@ -20,7 +20,8 @@
         "livewire/livewire": "^3.0"
     },
 	"require-dev": {
-		"laravel/pint": "^1.25"
+		"laravel/pint": "^1.25",
+        "pestphp/pest": "^4.1"
 	},
     "autoload": {
         "psr-4": {
@@ -28,6 +29,9 @@
         }
     },
 	"autoload-dev": {
+		"psr-4": {
+			"NyonCode\\LivewireTable\\Tests\\": "tests"
+		},
 		"files": ["_helpers.php"]
 	},
     "extra": {
@@ -38,8 +42,15 @@
         }
     },
 	"scripts": {
+		"test": "vendor/bin/phpunit",
+		"test-coverage": "vendor/bin/phpunit --coverage-html coverage",
 		"pint" : "./vendor/bin/pint"
 	},
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }

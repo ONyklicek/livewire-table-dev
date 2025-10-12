@@ -4,9 +4,6 @@ namespace NyonCode\LivewireTable\Concerns;
 
 trait HasPagination
 {
-    /**
-     * @var int
-     */
     protected int $perPage = 15;
 
     /**

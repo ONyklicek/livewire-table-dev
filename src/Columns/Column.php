@@ -7,6 +7,8 @@ use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
+use NyonCode\LivewireTable\Builders\RelationshipResolver;
 use Throwable;
 use UnitEnum;
 
@@ -32,9 +34,19 @@ abstract class Column implements Htmlable
 
     /**
      * Create a new column instance.
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct(string $field)
     {
+        if (Str::contains($field, '.')) {
+            try {
+                RelationshipResolver::validateField($field);
+            } catch (InvalidArgumentException $e) {
+                throw new InvalidArgumentException("Invalid field format for column: {$e->getMessage()}");
+            }
+        }
+
         $this->field = $field;
         $this->label = Str::headline($field);
     }

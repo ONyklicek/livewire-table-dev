@@ -2,10 +2,11 @@
 
 namespace NyonCode\LivewireTable;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
+use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\QueryBuilder;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
 use NyonCode\LivewireTable\Concerns\HasActions;
@@ -136,8 +137,6 @@ class Table
 
     /**
      * Render the table.
-     *
-     * @return string
      */
     public function render(): string
     {
@@ -185,6 +184,9 @@ class Table
      */
     public function getData(): LengthAwarePaginator|Collection
     {
+        // Validate all column fields
+        $this->validateColumnFields();
+
         if ($this->model instanceof Collection) {
             return $this->model;
         }
@@ -240,5 +242,21 @@ class Table
 
         // 6. Get final query and paginate
         return $queryBuilder->get()->paginate($this->perPage);
+    }
+
+    /**
+     * Validate all column fields before processing
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function validateColumnFields(): void
+    {
+        foreach ($this->columns as $column) {
+            $field = $column->getField();
+
+            if (RelationshipResolver::isRelationship($field)) {
+                RelationshipResolver::validateField($field);
+            }
+        }
     }
 }
