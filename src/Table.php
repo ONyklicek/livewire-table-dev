@@ -34,7 +34,7 @@ class Table implements Renderable, Htmlable
     use HasSavedFilters;
     use HasSubRows;
 
-    public Model|Builder|Collection $model;
+    public Model|Builder|Collection|string $model;
 
     public ?string $livewireComponent = null;
 
@@ -63,8 +63,12 @@ class Table implements Renderable, Htmlable
         return new static;
     }
 
-    public function model(Model|Builder|Collection $model): static
+    public function model(Model|Builder|Collection|string $model): static
     {
+        // #TODO implement (string) Model::class
+        // #TODO implement Collection
+        // #TODO implement Builder
+
         $this->model = $model;
 
         return $this;
@@ -175,7 +179,7 @@ class Table implements Renderable, Htmlable
     /**
      * Apply grouping to paginated data
      */
-    protected function applyGrouping($data): \Illuminate\Support\Collection
+    public function applyGrouping($data): Collection
     {
         // If data is paginator, group only current page items
         $items = $data instanceof LengthAwarePaginator ? $data->items() : $data;
