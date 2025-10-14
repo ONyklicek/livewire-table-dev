@@ -20,7 +20,6 @@ use NyonCode\LivewireTable\Concerns\HasPagination;
 use NyonCode\LivewireTable\Concerns\HasResponsiveScheme;
 use NyonCode\LivewireTable\Concerns\HasSavedFilters;
 use NyonCode\LivewireTable\Concerns\HasSubRows;
-use Throwable;
 
 class Table implements Renderable, Htmlable
 {
@@ -65,13 +64,31 @@ class Table implements Renderable, Htmlable
 
     public function model(Model|Builder|Collection|string $model): static
     {
-        // #TODO implement (string) Model::class
-        // #TODO implement Collection
-        // #TODO implement Builder
+        if (is_string($model)){
+            if (!is_subclass_of($model, Model::class)) {
+                throw new InvalidArgumentException("Class [$model] must be an instance of ".Model::class);
+            }
 
-        $this->model = $model;
+            $this->model = (new $model())->newQuery();
+            return $this;
+        }
 
-        return $this;
+        if ($model instanceof Model) {
+            $this->model = $model->newQuery();
+            return $this;
+        }
+
+        if ($model instanceof Builder) {
+            $this->model = $model;
+            return $this;
+        }
+
+        if ($model instanceof Collection) {
+            $this->model = $model;
+            return $this;
+        }
+
+        throw new InvalidArgumentException("Model must be an instance of " . Model::class . " or Builder or Collection");
     }
 
     /**
