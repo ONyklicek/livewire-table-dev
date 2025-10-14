@@ -5,15 +5,15 @@ namespace NyonCode\LivewireTable\Columns;
 use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
-use NyonCode\LivewireTable\Concerns\HasAuthorizable;
 use Throwable;
 use UnitEnum;
 
-abstract class Column implements Htmlable
+abstract class Column implements Renderable, Htmlable
 {
     public string $field;
 

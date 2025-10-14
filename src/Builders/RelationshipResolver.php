@@ -4,6 +4,7 @@ namespace NyonCode\LivewireTable\Builders;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 
@@ -21,7 +22,7 @@ class RelationshipResolver
                 try {
                     return self::parseRelationship($field);
                 } catch (InvalidArgumentException $e) {
-                    logger()->warning("Invalid relationship field: {$field}", [
+                    Log::warning("Invalid relationship field: [$field]", [
                         'error' => $e->getMessage(),
                     ]);
 

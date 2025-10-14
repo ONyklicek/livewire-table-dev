@@ -2,11 +2,12 @@
 
 namespace NyonCode\LivewireTable;
 
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\QueryBuilder;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
@@ -21,7 +22,7 @@ use NyonCode\LivewireTable\Concerns\HasSavedFilters;
 use NyonCode\LivewireTable\Concerns\HasSubRows;
 use Throwable;
 
-class Table
+class Table implements Renderable, Htmlable
 {
     use HasActions;
     use HasColumns;

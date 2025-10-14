@@ -4,9 +4,10 @@ namespace NyonCode\LivewireTable\Actions;
 
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
 use Throwable;
 
-class Action implements Htmlable
+class Action implements Renderable, Htmlable
 {
     protected string $name;
 

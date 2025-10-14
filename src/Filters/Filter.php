@@ -3,10 +3,11 @@
 namespace NyonCode\LivewireTable\Filters;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
 use Throwable;
 
-abstract class Filter implements Htmlable
+abstract class Filter implements Renderable, Htmlable
 {
     protected string $name;
 
