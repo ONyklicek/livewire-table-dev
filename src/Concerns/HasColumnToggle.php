@@ -29,7 +29,13 @@ trait HasColumnToggle
     public function getVisibleColumns(): Collection
     {
         return $this->columns->filter(function ($column) {
-            return $column->isVisible() && $this->isColumnVisible($column->getField());
+            // Check if column is globally visible (not hidden by ->hidden() or ->visible(false))
+            if (!$column->isVisible()) {
+                return false;
+            }
+
+            // Check if column is toggled off by user
+            return $this->isColumnVisible($column->getField());
         });
     }
 
@@ -37,13 +43,14 @@ trait HasColumnToggle
     {
         $hiddenColumns = $this->state['hiddenColumns'] ?? [];
 
-        return ! in_array($columnField, $hiddenColumns);
+        return !in_array($columnField, $hiddenColumns);
     }
 
     public function getToggleableColumns(): Collection
     {
         return $this->columns->filter(function ($column) {
-            return ! $column->isVisible() && ! in_array($column->getField(), $this->alwaysVisibleColumns);
+            // Only show columns that are globally visible and not in alwaysVisible list
+            return $column->isVisible() && !in_array($column->getField(), $this->alwaysVisibleColumns);
         });
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\QueryBuilder;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
@@ -70,9 +71,6 @@ class Table
 
     /**
      * Set the live update interval for the table.
-     *
-     *
-     * @return $this
      */
     public function liveUpdate(int $seconds): static
     {
@@ -83,9 +81,6 @@ class Table
 
     /**
      * Set the Livewire component for the table.
-     *
-     *
-     * @return $this
      */
     public function setLivewireComponent(string $component): static
     {
@@ -96,9 +91,6 @@ class Table
 
     /**
      * Set the state for the table.
-     *
-     *
-     * @return $this
      */
     public function setState(array $state): static
     {
@@ -117,8 +109,6 @@ class Table
 
     /**
      * Convert the table to a string.
-     *
-     * @throws Throwable
      */
     public function __toString(): string
     {
@@ -127,8 +117,6 @@ class Table
 
     /**
      * Convert the table to HTML.
-     *
-     * @throws Throwable
      */
     public function toHtml(): string
     {
@@ -140,9 +128,13 @@ class Table
      */
     public function render(): string
     {
+        // Get data FIRST
+        $rawData = $this->getData();
+
+        // Then apply grouping if needed
         $data = $this->groupBy
-            ? $this->getGroupedData()
-            : collect([['items' => $this->getData(), 'group' => null, 'key' => null]]);
+            ? $this->applyGrouping($rawData)
+            : collect([['items' => $rawData, 'group' => null, 'key' => null]]);
 
         $this->data = [
             'columns' => $this->getVisibleColumns(),
@@ -161,7 +153,7 @@ class Table
             'isCollapsible' => $this->isCollapsible(),
             'hasSubRows' => $this->hasSubRows(),
             'expandedRows' => $this->getExpandedRows(),
-            'expandedGroups' => $this->expandedGroups,
+            'expandedGroups' => $this->state['expandedGroups'] ?? [],
             'columnToggleEnabled' => $this->isColumnToggleEnabled(),
             'toggleableColumns' => $this->getToggleableColumns(),
             'hiddenColumns' => $this->getHiddenColumns(),
@@ -180,6 +172,32 @@ class Table
     }
 
     /**
+     * Apply grouping to paginated data
+     */
+    protected function applyGrouping($data): \Illuminate\Support\Collection
+    {
+        // If data is paginator, group only current page items
+        $items = $data instanceof LengthAwarePaginator ? $data->items() : $data;
+
+        $grouped = collect($items)->groupBy(function ($item) {
+            if ($this->groupByCallback) {
+                return ($this->groupByCallback)($item);
+            }
+            return data_get($item, $this->groupBy);
+        });
+
+        return $grouped->map(function ($groupItems, $groupKey) use ($data) {
+            return [
+                'key' => $groupKey,
+                'label' => $this->formatGroupLabel($groupKey, $groupItems),
+                'items' => $data instanceof LengthAwarePaginator ? $data->setCollection($groupItems) : $groupItems,
+                'count' => $groupItems->count(),
+                'collapsed' => !in_array($groupKey, $this->state['expandedGroups'] ?? []),
+            ];
+        })->values();
+    }
+
+    /**
      * Get the data for the table.
      */
     public function getData(): LengthAwarePaginator|Collection
@@ -193,55 +211,89 @@ class Table
 
         $query = $this->model instanceof Model
             ? $this->model->query()
-            : $this->model;
+            : clone $this->model;
 
         // Eager load relationships FIRST (optimization)
         $relationships = RelationshipResolver::extractRelationships($this->columns);
         $query = RelationshipResolver::eagerLoad($query, $relationships);
 
-        // Create QueryBuilder instance
-        $queryBuilder = new QueryBuilder($query);
-
-        // Apply filters
+        // Apply column filters
         foreach ($this->filters as $filter) {
             $value = $this->state['filters'][$filter->getName()] ?? null;
             if ($value !== null && $value !== '') {
-                $query = $filter->apply($queryBuilder->get(), $value);
-                $queryBuilder = new QueryBuilder($query);
+                $query = $filter->apply($query, $value);
             }
         }
 
+        // Apply global filters
         foreach ($this->globalFilters as $filter) {
             $value = $this->state['filters'][$filter->getName()] ?? null;
             if ($value !== null && $value !== '') {
-                $query = $filter->apply($queryBuilder->get(), $value);
-                $queryBuilder = new QueryBuilder($query);
+                $query = $filter->apply($query, $value);
             }
         }
 
-        // Apply search
+        // Apply global search
         $search = $this->state['search'] ?? '';
-        if (! empty($search)) {
+        if (!empty($search)) {
             $searchableFields = $this->columns
-                ->filter(fn ($col) => $col->isSearchable())
-                ->map(fn ($col) => $col->getField())
+                ->filter(fn($col) => $col->isSearchable())
+                ->map(fn($col) => $col->getField())
                 ->toArray();
 
-            if (! empty($searchableFields)) {
+            if (!empty($searchableFields)) {
+                $queryBuilder = new QueryBuilder($query);
                 $queryBuilder->search($searchableFields, $search);
+                $query = $queryBuilder->get();
             }
         }
 
-        // 5. Apply sorting
+        // Apply sorting
         $sortColumn = $this->state['sortColumn'] ?? '';
         $sortDirection = $this->state['sortDirection'] ?? 'asc';
 
-        if (! empty($sortColumn)) {
-            $queryBuilder->multiSort([$sortColumn => $sortDirection]);
+        if (!empty($sortColumn)) {
+            if (str_contains($sortColumn, '.')) {
+                // Relationship sorting - use join
+                $parts = explode('.', $sortColumn);
+                $relationName = $parts[0];
+                $relationField = $parts[1];
+
+                // Get the relationship
+                $relation = $query->getModel()->{$relationName}();
+                $relatedTable = $relation->getRelated()->getTable();
+                $foreignKey = $relation->getForeignKeyName();
+                $ownerKey = $relation->getOwnerKeyName();
+
+                $query->leftJoin(
+                    $relatedTable,
+                    $query->getModel()->getTable() . '.' . $foreignKey,
+                    '=',
+                    $relatedTable . '.' . $ownerKey
+                )->orderBy($relatedTable . '.' . $relationField, $sortDirection)
+                    ->select($query->getModel()->getTable() . '.*');
+            } else {
+                $query->orderBy($sortColumn, $sortDirection);
+            }
         }
 
-        // 6. Get final query and paginate
-        return $queryBuilder->get()->paginate($this->perPage);
+        // Get perPage from state OR use default
+        $perPage = isset($this->state['perPage']) ? (int) $this->state['perPage'] : $this->perPage;
+
+        // Count before pagination
+        $totalCount = $query->count();
+
+        // Paginate
+        $result = $query->paginate($perPage);
+
+        // Ochrana proti prázdné stránce
+        if ($result->isEmpty() && $result->currentPage() > 1) {
+            $lastPage = max(1, $result->lastPage());
+
+            $result = $query->paginate($perPage, ['*'], 'page', $lastPage);
+        }
+
+        return $result;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace NyonCode\LivewireTable\Livewire\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use NyonCode\LivewireTable\Columns\EditableColumn;
@@ -38,6 +39,8 @@ trait HasTable
     public bool $showPresetModal = false;
 
     public string $presetName = '';
+
+    public string $selectedBulkAction = '';
 
     public function mountHasTable(): void
     {
@@ -76,17 +79,22 @@ trait HasTable
         $this->dispatch('preset-loaded');
     }
 
+    /**
+     * Get table property - vždy fresh instance s aktuálním state
+     */
     public function getTableProperty(): Table
     {
         $table = $this->table(Table::make());
 
         $table->setLivewireComponent(static::class);
+
+        // KRITICKÉ: State se musí nastavit s AKTUÁLNÍMI hodnotami
         $table->setState([
             'filters' => $this->tableFilters,
             'search' => $this->tableSearch,
             'sortColumn' => $this->tableSortColumn,
             'sortDirection' => $this->tableSortDirection,
-            'perPage' => $this->tablePerPage,
+            'perPage' => $this->tablePerPage,  // ← Tady se předává aktuální hodnota
             'selected' => $this->tableSelected,
             'expandedGroups' => $this->expandedGroups,
             'expandedRows' => $this->expandedRows,
@@ -96,16 +104,33 @@ trait HasTable
         return $table;
     }
 
+    /**
+     * Updated hook - search
+     */
     public function updatedTableSearch(): void
     {
         $this->resetPage();
     }
 
+    /**
+     * Updated hook - filters
+     */
     public function updatedTableFilters(): void
     {
         $this->resetPage();
     }
 
+    /**
+     * Updated hook - per page
+     */
+    public function updatedTablePerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    /**
+     * Sort by column
+     */
     public function sortBy(string $column): void
     {
         if ($this->tableSortColumn === $column) {
@@ -114,19 +139,47 @@ trait HasTable
             $this->tableSortColumn = $column;
             $this->tableSortDirection = 'asc';
         }
+
+        $this->resetPage();
     }
 
-    public function selectAll(): void
+    /**
+     * Updated hook - select all
+     */
+    public function updatedTableSelectAll(): void
     {
-        $this->tableSelectAll = ! $this->tableSelectAll;
-
         if ($this->tableSelectAll) {
-            $this->tableSelected = $this->table->getData()->pluck('id')->toArray();
+            // Get all IDs from current page data
+            $table = $this->table(Table::make());
+            $data = $table->getData();
+
+            if ($data instanceof LengthAwarePaginator) {
+                $this->tableSelected = $data->pluck('id')->toArray();
+            } elseif ($data instanceof \Illuminate\Support\Collection) {
+                $this->tableSelected = $data->pluck('id')->toArray();
+            }
         } else {
             $this->tableSelected = [];
         }
     }
 
+    /**
+     * Updated hook - individual selection changed
+     */
+    public function updatedTableSelected(): void
+    {
+        $table = $this->table(Table::make());
+        $data = $table->getData();
+
+        if ($data instanceof LengthAwarePaginator) {
+            $allIds = $data->pluck('id')->toArray();
+            $this->tableSelectAll = !empty($allIds) && count(array_intersect($this->tableSelected, $allIds)) === count($allIds);
+        }
+    }
+
+    /**
+     * Execute single action
+     */
     public function executeAction(string $action, $recordId): void
     {
         $table = $this->table(Table::make());
@@ -137,26 +190,51 @@ trait HasTable
             $record = $model instanceof Builder
                 ? $model->find($recordId)
                 : $model::find($recordId);
-            $actionObject->execute($record);
+
+            if ($record) {
+                $actionObject->execute($record);
+                $this->dispatch('action-executed', ['action' => $action]);
+            }
         }
     }
 
-    public function executeBulkAction(string $action): void
+    /**
+     * Execute bulk action
+     */
+    public function executeBulkAction(?string $action = null): void
     {
-        $table = $this->table(Table::make());
-        $bulkActionObject = $table->getBulkActions()->firstWhere('name', $action);
+        $actionName = $action ?? $this->selectedBulkAction;
 
-        if ($bulkActionObject && ! empty($this->tableSelected)) {
+        if (empty($actionName)) {
+            return;
+        }
+
+        $table = $this->table(Table::make());
+
+
+        $bulkActionObject = $table->getBulkActions()->first(function($a) use ($actionName) {
+            return $a->getName() === $actionName;
+        });
+
+        if ($bulkActionObject && !empty($this->tableSelected)) {
             $model = $table->getModel();
             $records = $model instanceof Builder
                 ? $model->findMany($this->tableSelected)
                 : $model::findMany($this->tableSelected);
+
             $bulkActionObject->execute($records);
+
             $this->tableSelected = [];
             $this->tableSelectAll = false;
+            $this->selectedBulkAction = '';
+
+            $this->dispatch('bulk-action-executed', ['action' => $actionName]);
         }
     }
 
+    /**
+     * Update cell (for editable columns)
+     */
     public function updateCell($recordId, string $columnField, $value): void
     {
         $table = $this->table(Table::make());
@@ -189,47 +267,59 @@ trait HasTable
         ]);
     }
 
+    /**
+     * Toggle group (for collapsible groups)
+     */
     public function toggleGroup(string $groupKey): void
     {
         if (in_array($groupKey, $this->expandedGroups)) {
-            $this->expandedGroups = array_filter(
-                $this->expandedGroups,
-                fn ($k) => $k !== $groupKey
+            $this->expandedGroups = array_values(
+                array_filter($this->expandedGroups, fn($k) => $k !== $groupKey)
             );
         } else {
             $this->expandedGroups[] = $groupKey;
         }
     }
 
+    /**
+     * Toggle row (for sub-rows)
+     */
     public function toggleRow($recordId): void
     {
         if (in_array($recordId, $this->expandedRows)) {
-            $this->expandedRows = array_filter(
-                $this->expandedRows,
-                fn ($id) => $id !== $recordId
+            $this->expandedRows = array_values(
+                array_filter($this->expandedRows, fn($id) => $id !== $recordId)
             );
         } else {
             $this->expandedRows[] = $recordId;
         }
     }
 
+    /**
+     * Toggle column visibility
+     */
     public function toggleColumn(string $columnField): void
     {
         if (in_array($columnField, $this->hiddenColumns)) {
-            $this->hiddenColumns = array_filter(
-                $this->hiddenColumns,
-                fn ($field) => $field !== $columnField
+            $this->hiddenColumns = array_values(
+                array_filter($this->hiddenColumns, fn($field) => $field !== $columnField)
             );
         } else {
             $this->hiddenColumns[] = $columnField;
         }
     }
 
+    /**
+     * Show all columns
+     */
     public function showAllColumns(): void
     {
         $this->hiddenColumns = [];
     }
 
+    /**
+     * Save preset
+     */
     public function savePreset(): void
     {
         $this->validate([
@@ -250,6 +340,9 @@ trait HasTable
         $this->dispatch('preset-saved');
     }
 
+    /**
+     * Delete preset
+     */
     public function deletePreset(int $presetId): void
     {
         $preset = TableFilterPreset::find($presetId);
@@ -266,6 +359,9 @@ trait HasTable
         $this->dispatch('preset-deleted');
     }
 
+    /**
+     * Clear all filters
+     */
     public function clearFilters(): void
     {
         $this->tableFilters = [];
