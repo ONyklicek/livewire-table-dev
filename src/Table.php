@@ -20,6 +20,7 @@ use NyonCode\LivewireTable\Concerns\HasPagination;
 use NyonCode\LivewireTable\Concerns\HasResponsiveScheme;
 use NyonCode\LivewireTable\Concerns\HasSavedFilters;
 use NyonCode\LivewireTable\Concerns\HasSubRows;
+use Throwable;
 
 class Table implements Renderable, Htmlable
 {
@@ -147,6 +148,8 @@ class Table implements Renderable, Htmlable
 
     /**
      * Render the table.
+     *
+     * @throws Throwable
      */
     public function render(): string
     {
@@ -196,7 +199,7 @@ class Table implements Renderable, Htmlable
     /**
      * Apply grouping to paginated data
      */
-    public function applyGrouping($data): Collection
+    public function applyGrouping($data): \Illuminate\Support\Collection
     {
         // If data is paginator, group only current page items
         $items = $data instanceof LengthAwarePaginator ? $data->items() : $data;
