@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
 use Throwable;
 
-abstract class Filter implements Renderable, Htmlable
+abstract class Filter implements Htmlable
 {
     protected string $name;
 

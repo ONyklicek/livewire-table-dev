@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Throwable;
 
-class Action implements Renderable, Htmlable
+class Action implements Htmlable
 {
     protected string $name;
 

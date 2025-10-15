@@ -3,7 +3,6 @@
 namespace NyonCode\LivewireTable;
 
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +21,7 @@ use NyonCode\LivewireTable\Concerns\HasSavedFilters;
 use NyonCode\LivewireTable\Concerns\HasSubRows;
 use Throwable;
 
-class Table implements Renderable, Htmlable
+class Table implements Htmlable
 {
     use HasActions;
     use HasColumns;
@@ -65,7 +64,7 @@ class Table implements Renderable, Htmlable
 
     public function model(Model|Builder|Collection|string $model): static
     {
-        if (is_string($model)){
+        if (is_string($model)) {
             if (!is_subclass_of($model, Model::class)) {
                 throw new InvalidArgumentException("Class [$model] must be an instance of ".Model::class);
             }
@@ -89,7 +88,9 @@ class Table implements Renderable, Htmlable
             return $this;
         }
 
-        throw new InvalidArgumentException("Model must be an instance of " . Model::class . " or Builder or Collection");
+        throw new InvalidArgumentException(
+            'Argument must be a string class name, instance of Model, Builder or Collection.'
+        );
     }
 
     /**
@@ -132,6 +133,8 @@ class Table implements Renderable, Htmlable
 
     /**
      * Convert the table to a string.
+     *
+     * @throws Throwable
      */
     public function __toString(): string
     {
@@ -140,6 +143,8 @@ class Table implements Renderable, Htmlable
 
     /**
      * Convert the table to HTML.
+     *
+     * @throws Throwable
      */
     public function toHtml(): string
     {
@@ -193,7 +198,7 @@ class Table implements Renderable, Htmlable
             'tableFilters' => $this->state['filters'] ?? [],
         ];
 
-        return view('livewire-table::components.table.table', $this->data)->render();
+        return view('livewire-table::components.table.index', $this->data)->render();
     }
 
     /**

@@ -1,5 +1,4 @@
 @php
-
     $colorClasses = [
         'green' => 'bg-green-100 text-green-800 ring-green-600/20',
         'red' => 'bg-red-100 text-red-800 ring-red-600/20',

@@ -1,6 +1,6 @@
 # Laravel Livewire Table 📊
 
-Advanced, fully object-oriented and server-driven table system for Laravel with Livewire 3, Alpine.js and Tailwind CSS 3.x/4.x.
+Pokročilý, plně objektový a server-driven tabulkový systém pro Laravel s Livewire 3, Alpine.js a Tailwind CSS 3.x/4.x.
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue)](https://php.net)
 [![Laravel](https://img.shields.io/badge/Laravel-11%20%7C%2012-red)](https://laravel.com)
@@ -9,74 +9,74 @@ Advanced, fully object-oriented and server-driven table system for Laravel with 
 
 ---
 
-## 🎯 Features
+## 🎯 Vlastnosti
 
-- ✅ **SDUI (Server-Driven UI)** - Everything configurable from PHP
-- ✅ **Inline Editing** - Edit directly in table cells
-- ✅ **Grouping** - Group rows with collapsible groups
-- ✅ **Sub-rows** - Expandable nested content
-- ✅ **Column Toggle** - Dynamic column visibility control
-- ✅ **Saved Filters** - Save and load filter combinations
-- ✅ **Relationships** - Full dot notation support (`company.name`)
-- ✅ **Enum Support** - Automatic detection of PHP 8.1+ enums
-- ✅ **Responsive** - Mobile/Tablet/Desktop optimization
-- ✅ **Sorting & Filtering** - Per-column and global
-- ✅ **Bulk Actions** - Mass operations on selected rows
-- ✅ **Live Updates** - Auto-refresh every N seconds
-- ✅ **Htmlable** - Full support for `__toString()` and `toHtml()`
-- ✅ **Tailwind 3.x/4.x** - Compatible with both versions
+- ✅ **SDUI (Server-Driven UI)** - Vše konfigurovatelné z PHP
+- ✅ **Inline Editing** - Úprava přímo v buňkách tabulky
+- ✅ **Grouping** - Seskupování řádků s collapsible groups
+- ✅ **Sub-rows** - Expandable vnořený obsah
+- ✅ **Column Toggle** - Dynamické skrývání/zobrazování sloupců
+- ✅ **Saved Filters** - Uložené kombinace filtrů
+- ✅ **Relationships** - Podpora dot notation (`company.name`)
+- ✅ **Enum Support** - Automatická detekce PHP 8.1+ enums
+- ✅ **Responsive** - Mobile/Tablet/Desktop optimalizace
+- ✅ **Sorting & Filtering** - Per-column i globální
+- ✅ **Bulk Actions** - Hromadné operace
+- ✅ **Live Updates** - Auto-refresh každých N sekund
+- ✅ **Htmlable** - Plná podpora `__toString()` a `toHtml()`
+- ✅ **Tailwind 3.x/4.x** - Kompatibilní s oběma verzemi
 
 ---
 
-## 📋 Requirements
+## 📋 Požadavky
 
-| Requirement | Version |
-|-------------|---------|
+| Požadavek | Verze |
+|-----------|-------|
 | PHP | 8.2+ |
-| Laravel | 11.x or 12.x |
+| Laravel | 11.x nebo 12.x |
 | Livewire | 3.0+ |
-| Tailwind CSS | 3.x or 4.x |
-| Alpine.js | 3.x (included in Livewire 3) |
+| Tailwind CSS | 3.x nebo 4.x |
+| Alpine.js | 3.x (zahrnuto v Livewire 3) |
 
 ---
 
-## 📦 Installation
+## 📦 Instalace
 
-### Step 1: Install via Composer
+### Krok 1: Instalace přes Composer
 
 ```bash
 composer require nyoncode/livewire-table
 ```
 
-### Step 2: Publish Configuration and Assets
+### Krok 2: Publikování konfigurace a assets
 
 ```bash
-# Publish configuration
+# Publikovat konfiguraci
 php artisan vendor:publish --tag="livewire-table-config"
 
-# Publish migrations (for Saved Filters)
+# Publikovat migrace (pro Saved Filters)
 php artisan vendor:publish --tag="livewire-table-migrations"
 
-# Publish views (optional - only if you want to customize)
+# Publikovat views (volitelné - pouze pokud chcete customizovat)
 php artisan vendor:publish --tag="livewire-table-views"
 
-# Publish translations (optional)
+# Publikovat překlady (volitelné)
 php artisan vendor:publish --tag="livewire-table-translations"
 ```
 
-### Step 3: Run Migrations
+### Krok 3: Spuštění migrací
 
 ```bash
 php artisan migrate
 ```
 
-This will create the `table_filter_presets` table for storing user filter presets.
+To vytvoří tabulku `table_filter_presets` pro ukládání uživatelských filtrů.
 
-### Step 4: Configure Tailwind CSS
+### Krok 4: Konfigurace Tailwind CSS
 
-Add package view paths to your `tailwind.config.js`:
+Přidej cesty k package views do `tailwind.config.js`:
 
-#### For Tailwind CSS 3.x:
+#### Pro Tailwind CSS 3.x:
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -87,7 +87,7 @@ export default {
         './vendor/nyoncode/livewire-table/resources/views/**/*.blade.php',
     ],
     safelist: [
-        // Badge colors - required for dynamic colors
+        // Badge colors - nutné pro dynamické barvy
         'bg-green-100', 'text-green-800', 'ring-green-600/20', 'fill-green-500',
         'bg-red-100', 'text-red-800', 'ring-red-600/20', 'fill-red-500',
         'bg-yellow-100', 'text-yellow-800', 'ring-yellow-600/20', 'fill-yellow-500',
@@ -103,7 +103,7 @@ export default {
 }
 ```
 
-#### For Tailwind CSS 4.x:
+#### Pro Tailwind CSS 4.x:
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -125,35 +125,35 @@ export default {
 }
 ```
 
-### Step 5: Build Assets
+### Krok 5: Build assets
 
 ```bash
 npm run build
-# or for development
+# nebo pro development
 npm run dev
 ```
 
-### Step 6: Verify Installation
+### Krok 6: Ověření instalace
 
-Check that the service provider was registered:
+Zkontroluj, že service provider byl zaregistrován:
 
 ```bash
 php artisan about
 ```
 
-You should see a section with information about the **Livewire Table** package.
+Měl bys vidět sekci s informacemi o **Livewire Table** package.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Rychlý start
 
-### 1. Create a Livewire Component
+### 1. Vytvoř Livewire komponentu
 
 ```bash
 php artisan make:livewire UsersTable
 ```
 
-### 2. Implement the Table
+### 2. Implementuj tabulku
 
 ```php
 <?php
@@ -161,12 +161,12 @@ php artisan make:livewire UsersTable
 namespace App\Livewire;
 
 use App\Models\User;
-use NyonCode\LivewireTable\Table;
-use NyonCode\LivewireTable\Columns\TextColumn;
-use NyonCode\LivewireTable\Columns\BadgeColumn;
-use NyonCode\LivewireTable\Filters\TextFilter;
-use NyonCode\LivewireTable\Filters\SelectFilter;
-use NyonCode\LivewireTable\Actions\Action;
+use App\Support\Tables\Table;
+use App\Support\Tables\Columns\TextColumn;
+use App\Support\Tables\Columns\BadgeColumn;
+use App\Support\Tables\Filters\TextFilter;
+use App\Support\Tables\Filters\SelectFilter;
+use App\Support\Tables\Actions\Action;
 use Livewire\Component;
 
 class UsersTable extends Component
@@ -179,7 +179,7 @@ class UsersTable extends Component
             ->model(User::query())
             ->columns([
                 TextColumn::make('name')
-                    ->label('Name')
+                    ->label('Jméno')
                     ->searchable()
                     ->sortable(),
                 
@@ -198,19 +198,19 @@ class UsersTable extends Component
             ])
             ->filters([
                 TextFilter::make('name_filter', 'name')
-                    ->label('Name')
-                    ->placeholder('Search...'),
+                    ->label('Jméno')
+                    ->placeholder('Hledat...'),
                 
                 SelectFilter::make('status_filter', 'status')
                     ->label('Status')
                     ->options([
-                        'active' => 'Active',
-                        'inactive' => 'Inactive',
+                        'active' => 'Aktivní',
+                        'inactive' => 'Neaktivní',
                     ]),
             ])
             ->actions([
                 Action::make('edit')
-                    ->label('Edit')
+                    ->label('Upravit')
                     ->color('blue')
                     ->action(fn($record) => $this->redirect(route('users.edit', $record))),
             ])
@@ -224,21 +224,21 @@ class UsersTable extends Component
 }
 ```
 
-### 3. Create Blade View
+### 3. Vytvoř Blade view
 
 ```blade
 {{-- resources/views/livewire/users-table.blade.php --}}
 
 <div>
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-6">Users</h1>
+        <h1 class="text-2xl font-bold mb-6">Uživatelé</h1>
         
         {!! $this->table->render() !!}
     </div>
 </div>
 ```
 
-### 4. Use in Route
+### 4. Použij v route
 
 ```php
 use App\Livewire\UsersTable;
@@ -248,33 +248,33 @@ Route::get('/users', UsersTable::class);
 
 ---
 
-## 📘 Complete Guide
+## 📘 Kompletní průvodce
 
-### Columns
+### Sloupce (Columns)
 
 #### TextColumn
 
-Basic text column with advanced features.
+Základní textový sloupec s pokročilými funkcemi.
 
 ```php
 use NyonCode\LivewireTable\Columns\TextColumn;
 
 TextColumn::make('name')
-    ->label('Name')
-    ->searchable()      // Searchable
-    ->sortable()        // Sortable
-    ->copyable()        // Add copy button
-    ->limit(50)         // Truncate text to 50 characters
-    ->placeholder('—')  // Display when value is null
-    ->hideOn(['sm', 'md'])  // Hide on mobile and tablet
-    ->format(fn($value) => strtoupper($value))  // Custom formatting
-    ->visible(auth()->user()->isAdmin())  // Conditional visibility
-    ->hidden(!config('app.debug'))  // Or hide
+    ->label('Jméno')
+    ->searchable()      // Lze prohledávat
+    ->sortable()        // Lze řadit
+    ->copyable()        // Tlačítko pro kopírování
+    ->limit(50)         // Ořízne text na 50 znaků
+    ->placeholder('—')  // Zobrazí když je hodnota null
+    ->hideOn(['sm', 'md'])  // Skryje na mobilech a tabletech
+    ->format(fn($value) => strtoupper($value))  // Custom formátování
+    ->visible(auth()->user()->isAdmin())  // Podmíněná viditelnost
+    ->hidden(!config('app.debug'))  // Nebo skrytí
 ```
 
 #### BadgeColumn
 
-Colored badges for statuses and categories.
+Barevné odznaky pro stavy a kategorie.
 
 ```php
 use NyonCode\LivewireTable\Columns\BadgeColumn;
@@ -293,50 +293,50 @@ BadgeColumn::make('status')
     ])
     ->size('lg')  // sm, md, lg, xl
     ->format(fn($value) => match($value) {
-        true, 1 => 'Active',
-        false, 0 => 'Inactive',
-        default => 'Unknown'
+        true, 1 => 'Aktivní',
+        false, 0 => 'Neaktivní',
+        default => 'Neznámý'
     })
 ```
 
 #### ImageColumn
 
-Column for displaying images and avatars.
+Sloupcec pro zobrazení obrázků a avatarů.
 
 ```php
 use NyonCode\LivewireTable\Columns\ImageColumn;
 
 ImageColumn::make('avatar')
     ->label('Avatar')
-    ->circular()  // Circular image
+    ->circular()  // Kulatý obrázek
     ->size('md')  // sm, md, lg
     ->defaultImage('https://ui-avatars.com/api/?name=User')
 ```
 
 #### EditableColumn
 
-Editable column directly in the table (inline editing).
+Editovatelný sloupec přímo v tabulce (inline editing).
 
 ```php
 use NyonCode\LivewireTable\Columns\EditableColumn;
 
 EditableColumn::make('name')
-    ->label('Name')
+    ->label('Jméno')
     ->inputType('text')  // text, number, select, date, textarea
     ->rules('required|min:3')
-    ->options([  // For select
+    ->options([  // Pro select
         'option1' => 'Label 1',
         'option2' => 'Label 2',
     ])
     ->onSave(function ($record, $value) {
         $record->update(['name' => $value]);
-        $this->dispatch('notify', ['message' => 'Saved']);
+        $this->dispatch('notify', ['message' => 'Uloženo']);
     })
 ```
 
 #### Custom Column
 
-Create your own column type:
+Vytvoř vlastní typ sloupce:
 
 ```php
 use NyonCode\LivewireTable\Columns\Column;
@@ -362,40 +362,40 @@ class MyColumn extends Column
 
 ---
 
-### Relationships
+### Relationships (Vztahy)
 
-Full support for Eloquent relationships using **dot notation**:
+Plná podpora Eloquent vztahů pomocí **dot notation**:
 
 ```php
-// Simple relationship
+// Jednoduchý vztah
 TextColumn::make('department.name')
-    ->label('Department')
+    ->label('Oddělení')
     ->searchable()
     ->sortable()
 
-// Nested relationship
+// Vnořený vztah
 TextColumn::make('user.company.name')
-    ->label('Company')
+    ->label('Firma')
 
-// Automatic eager loading
-// RelationshipResolver automatically loads all relationships
+// Automatický eager loading
+// RelationshipResolver automaticky načte všechny relationships
 ```
 
-**Filters for relationships:**
+**Filtry pro relationships:**
 
 ```php
 TextFilter::make('company_name', 'company.name')
-    ->label('Company')
-    ->placeholder('Search company...')
+    ->label('Firma')
+    ->placeholder('Hledat firmu...')
 
 SelectFilter::make('department_id', 'department.id')
-    ->label('Department')
+    ->label('Oddělení')
     ->options(Department::pluck('name', 'id'))
 ```
 
 ---
 
-### Filters
+### Filtry (Filters)
 
 #### TextFilter
 
@@ -403,8 +403,8 @@ SelectFilter::make('department_id', 'department.id')
 use NyonCode\LivewireTable\Filters\TextFilter;
 
 TextFilter::make('name_filter', 'name')
-    ->label('Name')
-    ->placeholder('Search...')
+    ->label('Jméno')
+    ->placeholder('Hledat...')
     ->operator('like')  // like, =, !=, >, <, >=, <=
 ```
 
@@ -416,10 +416,10 @@ use NyonCode\LivewireTable\Filters\SelectFilter;
 SelectFilter::make('status_filter', 'status')
     ->label('Status')
     ->options([
-        'active' => 'Active',
-        'inactive' => 'Inactive',
+        'active' => 'Aktivní',
+        'inactive' => 'Neaktivní',
     ])
-    ->placeholder('Select status')
+    ->placeholder('Vyberte status')
 ```
 
 #### DateFilter
@@ -428,18 +428,18 @@ SelectFilter::make('status_filter', 'status')
 use NyonCode\LivewireTable\Filters\DateFilter;
 
 DateFilter::make('created_after', 'created_at')
-    ->label('From date')
+    ->label('Od data')
     ->operator('>=')
 ```
 
 #### Global Filters
 
-Filters in dropdown menu instead of under columns:
+Filtry ve dropdown menu místo pod sloupci:
 
 ```php
 ->globalFilters([
     SelectFilter::make('department_id', 'department.id')
-        ->label('Department')
+        ->label('Oddělení')
         ->options(Department::pluck('name', 'id'))
         ->global(),
 ])
@@ -447,15 +447,15 @@ Filters in dropdown menu instead of under columns:
 
 ---
 
-### Actions
+### Akce (Actions)
 
-#### Simple Action
+#### Jednoduchá akce
 
 ```php
 use NyonCode\LivewireTable\Actions\Action;
 
 Action::make('edit')
-    ->label('Edit')
+    ->label('Upravit')
     ->icon('<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/>') 
     ->color('blue')
     ->action(function ($record) {
@@ -463,52 +463,52 @@ Action::make('edit')
     })
 ```
 
-#### Action with Confirmation
+#### Akce s potvrzením
 
 ```php
 Action::make('delete')
-    ->label('Delete')
+    ->label('Smazat')
     ->color('red')
     ->requireConfirmation(
-        'Delete user?',
-        'This action cannot be undone.'
+        'Smazat uživatele?',
+        'Tato akce je nevratná.'
     )
     ->action(function ($record) {
         $record->delete();
     })
 ```
 
-#### Action with Modal
+#### Akce s modálem
 
 ```php
 use NyonCode\LivewireTable\Actions\Modal;
 
 Action::make('details')
-    ->label('Details')
+    ->label('Detail')
     ->modal(
-        Modal::make('User Details')
-            ->info('Here are the detailed information')
+        Modal::make('Detail uživatele')
+            ->info('Zde jsou detailní informace')
             ->size('lg')  // sm, md, lg, xl, full
     )
 ```
 
 ---
 
-### Bulk Actions
+### Bulk Actions (Hromadné akce)
 
 ```php
 use NyonCode\LivewireTable\Actions\BulkAction;
 
 ->bulkActions([
     BulkAction::make('activate')
-        ->label('Activate Selected')
+        ->label('Aktivovat vybrané')
         ->color('green')
         ->action(function ($records) {
             $records->each->update(['status' => 'active']);
         }),
     
     BulkAction::make('delete')
-        ->label('Delete Selected')
+        ->label('Smazat vybrané')
         ->color('red')
         ->requireConfirmation()
         ->action(function ($records) {
@@ -519,17 +519,17 @@ use NyonCode\LivewireTable\Actions\BulkAction;
 
 ---
 
-### Grouping
+### Grouping (Seskupování)
 
 ```php
 ->groupBy('department.name')
 ->groupHeader(function ($key, $items) {
-    return sprintf('%s (%d users)', $key, $items->count());
+    return sprintf('%s (%d uživatelů)', $key, $items->count());
 })
 ->collapsibleGroups(true)
 ```
 
-**With custom logic:**
+**S custom logikou:**
 
 ```php
 ->groupBy('created_at', function ($item) {
@@ -537,13 +537,13 @@ use NyonCode\LivewireTable\Actions\BulkAction;
 })
 ->groupHeader(function ($key, $items) {
     $total = $items->sum('salary');
-    return "$key - Total: $" . number_format($total);
+    return "$key - Celkem: " . number_format($total) . " Kč";
 })
 ```
 
 ---
 
-### Sub-rows
+### Sub-rows (Vnořené řádky)
 
 ```php
 ->subRows('posts', function ($posts, $user) {
@@ -557,28 +557,28 @@ use NyonCode\LivewireTable\Actions\BulkAction;
 
 ---
 
-### Column Toggle
+### Column Toggle (Skrývání sloupců)
 
 ```php
 ->enableColumnToggle(true)
-->alwaysVisible(['name', 'email'])  // These columns cannot be hidden
+->alwaysVisible(['name', 'email'])  // Tyto sloupce nelze skrýt
 ```
 
 ---
 
-### Saved Filters
+### Saved Filters (Uložené filtry)
 
 ```php
 ->enablePresets(true)
 ```
 
-**Programmatically:**
+**Programaticky:**
 
 ```php
-// In Livewire component
+// V Livewire komponentě
 public function saveMyPreset()
 {
-    $this->savePreset('Active Users', [
+    $this->savePreset('Aktivní uživatelé', [
         'status' => 'active',
         'department_id' => 1,
     ], isDefault: true);
@@ -591,9 +591,9 @@ public function saveMyPreset()
 
 ```php
 ->scheme([
-    'mobile' => ['stack'],   // Cards instead of table
-    'tablet' => ['scroll'],  // Horizontal scroll
-    'desktop' => ['full'],   // Full table
+    'mobile' => ['stack'],   // Karty místo tabulky
+    'tablet' => ['scroll'],  // Horizontální scroll
+    'desktop' => ['full'],   // Plná tabulka
 ])
 ```
 
@@ -601,7 +601,7 @@ public function saveMyPreset()
 
 ```php
 TextColumn::make('description')
-    ->hideOn(['sm', 'md'])  // Hide on mobile and tablet
+    ->hideOn(['sm', 'md'])  // Skryj na mobilu a tabletu
 ```
 
 ---
@@ -609,7 +609,7 @@ TextColumn::make('description')
 ### Live Updates
 
 ```php
-->liveUpdate(60)  // Auto-refresh every 60 seconds
+->liveUpdate(60)  // Auto-refresh každých 60 sekund
 ```
 
 ---
@@ -623,11 +623,11 @@ TextColumn::make('description')
 
 ---
 
-## 🔧 Advanced Usage
+## 🔧 Pokročilé použití
 
 ### Enum Support
 
-Automatic detection of PHP 8.1+ enums:
+Automatická detekce PHP 8.1+ enums:
 
 ```php
 // Model
@@ -649,7 +649,7 @@ BadgeColumn::make('status')
     ])
 ```
 
-### Conditional Column Visibility
+### Podmíněná viditelnost sloupců
 
 ```php
 TextColumn::make('internal_notes')
@@ -665,11 +665,11 @@ TextColumn::make('debug_info')
 
 ### "Object could not be converted to string"
 
-**Solution:** Use `{!! $this->table->render() !!}` instead of `{{ $this->table }}`
+**Řešení:** Použij `{!! $this->table->render() !!}` místo `{{ $this->table }}`
 
 ### "Undefined variable $tableSearch"
 
-**Solution:** Make sure you're using the `HasTable` trait in your Livewire component:
+**Řešení:** Zkontroluj, že používáš trait `HasTable` v Livewire komponentě:
 
 ```php
 use NyonCode\LivewireTable\Livewire\Concerns\HasTable;
@@ -684,34 +684,34 @@ class MyTable extends Component
 
 ### "Method resetPage does not exist"
 
-**Solution:** The `HasTable` trait already includes `WithPagination`, you don't need to add it manually.
+**Řešení:** Trait `HasTable` už obsahuje `WithPagination`, nemusíš ho přidávat ručně.
 
-### Badge colors not applying
+### Badge barvy se neaplikují
 
-**Solution:**
-1. Add colors to Tailwind `safelist` (see installation)
-2. Run `npm run build`
-3. Don't use dynamic classes like `bg-{{ $color }}-100`
+**Řešení:**
+1. Přidej barvy do Tailwind `safelist` (viz instalace)
+2. Spusť `npm run build`
+3. Nepoužívej dynamické třídy typu `bg-{{ $color }}-100`
 
-### Filters not showing under columns
+### Filtry se nezobrazují pod sloupci
 
-**Solution:** The second parameter of the filter must match the column's `field`:
+**Řešení:** Druhý parametr filtru musí odpovídat `field` sloupce:
 
 ```php
-// CORRECT
+// SPRÁVNĚ
 TextColumn::make('name'),
-TextFilter::make('name_filter', 'name'),  // 'name' matches field
+TextFilter::make('name_filter', 'name'),  // 'name' odpovídá field
 
-// WRONG
+// ŠPATNĚ
 TextColumn::make('name'),
-TextFilter::make('name_filter', 'username'),  // Doesn't match
+TextFilter::make('name_filter', 'username'),  // Neshoduje se
 ```
 
 ---
 
-## 📊 Usage Examples
+## 📊 Příklady použití
 
-### E-commerce Orders
+### E-commerce objednávky
 
 ```php
 public function table(Table $table): Table
@@ -720,12 +720,12 @@ public function table(Table $table): Table
         ->model(Order::with(['customer', 'items']))
         ->columns([
             TextColumn::make('order_number')
-                ->label('Order Number')
+                ->label('Číslo objednávky')
                 ->searchable()
                 ->copyable(),
             
             TextColumn::make('customer.name')
-                ->label('Customer')
+                ->label('Zákazník')
                 ->searchable(),
             
             BadgeColumn::make('status')
@@ -737,7 +737,7 @@ public function table(Table $table): Table
                 ]),
             
             TextColumn::make('total')
-                ->format(fn($value) => '$' . number_format($value, 2)),
+                ->format(fn($value) => number_format($value, 2) . ' Kč'),
         ])
         ->groupBy('status')
         ->subRows('items', function ($items) {
@@ -746,128 +746,22 @@ public function table(Table $table): Table
 }
 ```
 
-### CRM Contacts
-
-```php
-public function table(Table $table): Table
-{
-    return $table
-        ->model(Contact::with(['company', 'tags']))
-        ->columns([
-            ImageColumn::make('photo')
-                ->circular()
-                ->size('sm'),
-            
-            EditableColumn::make('name')
-                ->inputType('text')
-                ->rules('required'),
-            
-            EditableColumn::make('email')
-                ->inputType('text')
-                ->rules('required|email'),
-            
-            TextColumn::make('company.name')
-                ->label('Company'),
-            
-            BadgeColumn::make('lead_status')
-                ->colors([
-                    'new' => 'blue',
-                    'contacted' => 'yellow',
-                    'qualified' => 'green',
-                    'lost' => 'red',
-                ]),
-        ])
-        ->enableColumnToggle(true)
-        ->enablePresets(true)
-        ->liveUpdate(30);
-}
-```
-
----
-
-## 🎨 Styling & Theming
-
-### Tailwind Safelist
-
-For dynamic colors in badges, you must add to `safelist`:
-
-```js
-safelist: [
-    'bg-green-100', 'text-green-800', 'ring-green-600/20',
-    'bg-red-100', 'text-red-800', 'ring-red-600/20',
-    // ... more colors
-]
-```
-
-### Custom Views
-
-Each column can have its own view:
-
-```php
-TextColumn::make('name')
-    ->view('components.table.columns.custom-text')
-```
-
-```blade
-{{-- resources/views/components/table/columns/custom-text.blade.php --}}
-
-<div class="custom-styling">
-    <strong>{{ $value }}</strong>
-</div>
-```
-
----
-
-## 🧪 Testing
-
-```bash
-composer test
-```
-
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! For major changes, please open an issue first.
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/nyoncode/livewire-table.git
-
-# Install dependencies
-composer install
-npm install
-
-# Run tests
-composer test
-
-# Code formatting
-composer pint
-```
-
----
+Pull requesty jsou vítány! Pro větší změny prosím nejprve otevřete issue.
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE)
+MIT License - viz [LICENSE](LICENSE)
 
-## 👨‍💻 Author
+## 👨‍💻 Autor
 
-Created with ❤️ by [NyonCode](https://nyoncode.cz)
+Vytvořeno s ❤️ [NyonCode](https://nyoncode.cz)
 
 **Ondřej Nyklíček**  
 📧 ondrej@nyoncode.cz
-
----
-
-## 🙏 Acknowledgments
-
-- Laravel Team for the amazing framework
-- Livewire Team for reactive components
-- Tailwind Labs for the utility-first CSS framework
-- Alpine.js for lightweight interactivity
 
 ---
 
@@ -875,25 +769,8 @@ Created with ❤️ by [NyonCode](https://nyoncode.cz)
 
 - [Laravel Documentation](https://laravel.com/docs)
 - [Livewire 3 Documentation](https://livewire.laravel.com)
-- [Tailwind CSS Documentation](https://tailwindcss.com)
-- [Alpine.js Documentation](https://alpinejs.dev)
-
----
-
-## 📝 Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
-
----
-
-## 🛣️ Roadmap
-
-- [ ] Export to CSV/Excel
-- [ ] Advanced search with query builder
-- [ ] Column resizing
-- [ ] Drag & drop row reordering
-- [ ] Dark mode support
-- [ ] More column types (Rating, Progress, etc.)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Alpine.js](https://alpinejs.dev)
 
 ---
 

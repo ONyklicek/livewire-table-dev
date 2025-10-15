@@ -7,13 +7,14 @@ use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use NyonCode\LivewireTable\Builders\RelationshipResolver;
 use Throwable;
 use UnitEnum;
 
-abstract class Column implements Renderable, Htmlable
+abstract class Column implements Htmlable
 {
     public string $field;
 
@@ -218,7 +219,7 @@ abstract class Column implements Renderable, Htmlable
             try {
                 return (bool) ($this->visibleCallback)();
             } catch (Throwable $e) {
-                logger()->warning('Column visibility callback failed', [
+                Log::warning('Column visibility callback failed', [
                     'column' => $this->field,
                     'error' => $e->getMessage(),
                 ]);

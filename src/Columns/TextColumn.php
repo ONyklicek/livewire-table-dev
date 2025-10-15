@@ -64,7 +64,7 @@ class TextColumn extends Column
     /**
      * {@inheritDoc}
      */
-    public function formatValue(mixed $value, Model $record): string
+    public function formatValue(mixed $value, Model $record): mixed
     {
         if ($value === null) {
             return $this->placeholder ?? '—';
