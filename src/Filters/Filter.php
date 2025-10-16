@@ -151,6 +151,11 @@ abstract class Filter implements Htmlable
         return $this->placeholder;
     }
 
+    public function getValue(): mixed
+    {
+        return $this->value ?? $this->default;
+    }
+
     /**
      * Check if the filter is global.
      */

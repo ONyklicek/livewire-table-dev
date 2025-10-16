@@ -4,28 +4,24 @@ namespace NyonCode\LivewireTable\Actions;
 
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Renderable;
 use Throwable;
 
 class Action implements Htmlable
 {
-    protected string $name;
+    public string $name;
 
-    protected ?string $label = null;
+    public string|null $label = null;
 
-    protected ?string $icon = null;
+    public string|null $icon = null;
 
-    protected ?string $color = 'primary';
+    public string|null $color = 'primary';
 
-    protected ?Closure $action = null;
+    public Closure|null $action = null;
 
-    protected ?Modal $modal = null;
-
-    protected bool $requiresConfirmation = false;
-
-    protected ?string $confirmationTitle = null;
-
-    protected ?string $confirmationText = null;
+    public Modal|null $modal = null;
+    public bool $requiresConfirmation = false;
+    public ?string $confirmationTitle = null;
+    public ?string $confirmationText = null;
 
     /**
      * Create a new action.
@@ -219,7 +215,7 @@ class Action implements Htmlable
      */
     public function render(): string
     {
-        return view('livewirei-table::components.table.actions.action', [
+        return view('livewire-table::components.table.actions.action', [
             'action' => $this,
         ])->render();
     }

@@ -18,22 +18,22 @@ abstract class Column implements Htmlable
 {
     public string $field;
 
-    public ?string $label = null;
+    public string|null $label = null;
 
     public bool $sortable = false;
 
     public bool $searchable = false;
 
     public bool $visible = true;
-    protected ?Closure $visibleCallback = null;
+    protected Closure|null $visibleCallback = null;
 
     protected array $responsiveHidden = [];
 
-    protected ?Closure $formatCallback = null;
+    protected Closure|null $formatCallback = null;
 
-    protected ?string $view = null;
+    protected string|null $view = null;
 
-    protected ?Model $record = null;
+    protected Model|null $record = null;
 
     /**
      * Create a new column instance.
@@ -325,6 +325,29 @@ abstract class Column implements Htmlable
         }
 
         return $value;
+    }
+
+    /**
+     * Get the visibility classes.
+     *
+     * @return string
+     */
+    public function getVisibilityClasses(): string
+    {
+        if (!$this->isVisible()) {
+            return 'hidden';
+        }
+
+        if (empty($this->responsiveHidden)) {
+            return '';
+        }
+
+        $classes = [];
+        foreach ($this->responsiveHidden as $breakpoint) {
+            $classes[] = "hidden {$breakpoint}:table-cell";
+        }
+
+        return implode(' ', $classes);
     }
 
     /**

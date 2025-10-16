@@ -10,9 +10,9 @@ class BadgeColumn extends Column
 
     protected array $icons = [];
 
-    protected ?string $size;
+    protected string|null $size;
 
-    protected ?string $view = 'livewire-table::components.table.columns.badge';
+    protected string|null $view = 'livewire-table::components.table.columns.badge';
 
     /**
      * Set colors.

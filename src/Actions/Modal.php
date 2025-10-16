@@ -4,17 +4,17 @@ namespace NyonCode\LivewireTable\Actions;
 
 class Modal
 {
-    protected string $type = 'info';
+    public string $type = 'info';
 
-    protected string $title;
+    public string $title;
 
-    protected ?string $description = null;
+    public string|null $description = null;
 
-    protected ?string $view = null;
+    public string|null $view = null;
 
-    protected array $data = [];
+    public array $data = [];
 
-    protected ?string $size = 'md';
+    public string|null $size = 'md';
 
     /**
      * Create a new modal.

@@ -232,7 +232,6 @@ class Table implements Htmlable
      */
     public function getData(): LengthAwarePaginator|Collection
     {
-        // Validate all column fields
         $this->validateColumnFields();
 
         if ($this->model instanceof Collection) {
@@ -243,24 +242,32 @@ class Table implements Htmlable
             ? $this->model->query()
             : clone $this->model;
 
-        // Eager load relationships FIRST (optimization)
+        // Eager load relationships FIRST
         $relationships = RelationshipResolver::extractRelationships($this->columns);
         $query = RelationshipResolver::eagerLoad($query, $relationships);
 
         // Apply column filters
         foreach ($this->filters as $filter) {
-            $value = $this->state['filters'][$filter->getName()] ?? null;
-            if ($value !== null && $value !== '') {
-                $query = $filter->apply($query, $value);
+            $filterName = $filter->getName();
+            $value = $this->state['filters'][$filterName] ?? null;
+
+            if ($value === null || $value === '' || $value === []) {
+                continue;
             }
+
+            $query = $filter->apply($query, $value);
         }
 
         // Apply global filters
         foreach ($this->globalFilters as $filter) {
-            $value = $this->state['filters'][$filter->getName()] ?? null;
-            if ($value !== null && $value !== '') {
-                $query = $filter->apply($query, $value);
+            $filterName = $filter->getName();
+            $value = $this->state['filters'][$filterName] ?? null;
+
+            if ($value === null || $value === '' || $value === []) {
+                continue;
             }
+
+            $query = $filter->apply($query, $value);
         }
 
         // Apply global search
@@ -284,12 +291,10 @@ class Table implements Htmlable
 
         if (!empty($sortColumn)) {
             if (str_contains($sortColumn, '.')) {
-                // Relationship sorting - use join
                 $parts = explode('.', $sortColumn);
                 $relationName = $parts[0];
                 $relationField = $parts[1];
 
-                // Get the relationship
                 $relation = $query->getModel()->{$relationName}();
                 $relatedTable = $relation->getRelated()->getTable();
                 $foreignKey = $relation->getForeignKeyName();
@@ -307,19 +312,12 @@ class Table implements Htmlable
             }
         }
 
-        // Get perPage from state OR use default
-        $perPage = isset($this->state['perPage']) ? (int) $this->state['perPage'] : $this->perPage;
-
-        // Count before pagination
-        $totalCount = $query->count();
-
         // Paginate
+        $perPage = (int) ($this->state['perPage'] ?? $this->perPage);
         $result = $query->paginate($perPage);
 
-        // Ochrana proti prázdné stránce
         if ($result->isEmpty() && $result->currentPage() > 1) {
             $lastPage = max(1, $result->lastPage());
-
             $result = $query->paginate($perPage, ['*'], 'page', $lastPage);
         }
 

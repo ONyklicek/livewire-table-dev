@@ -23,6 +23,7 @@ class TableFilterPreset extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        $userModel = config('auth.providers.users.model', 'App\\Models\\User');
+        return $this->belongsTo($userModel);
     }
 }

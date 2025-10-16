@@ -47,6 +47,10 @@ trait HasTable
         $table = $this->table(Table::make());
         $this->tablePerPage = $table->getPerPage();
 
+        foreach ($table->getFilters() as $filter) {
+            $this->tableFilters[$filter->getName()] = $filter->getDefault();
+        }
+
         if ($table->isPresetsEnabled()) {
             $defaultPreset = TableFilterPreset::where('user_id', auth()->id())
                 ->where('table_name', static::class)
@@ -118,6 +122,8 @@ trait HasTable
     public function updatedTableFilters(): void
     {
         $this->resetPage();
+
+        $this->activePresetId = null;
     }
 
     /**
